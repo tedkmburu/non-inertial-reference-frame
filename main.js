@@ -16,12 +16,19 @@ function setup()
         vel: createVector(0, 0, 0), 
         acc: createVector(0, 0, 0), 
         center: createVector(0, 0, 0), 
-        up: createVector(0, 1, 0)};
+        up: createVector(0, 1, 0),
+        angle: createVector(0, 0, 0),
+        omega: createVector(0, 0, 0),
+        angularAcceleration: createVector(0, 0, 0)};
 
-    rectangles.push(new Rectangle({size: createVector(100, 200, 50), pos: createVector(0, 0, 100), omega: createVector(0, 0, 0)}));
-    spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(-200, 0, 200), omega: createVector(0, 0.05, 0), fill: "red"}));
-    spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(200, 0, 200), omega: createVector(0, 0, 0.05), fill: "green"}));
-    spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(200, 0, -200), omega: createVector(0.05, 0), fill: "blue"}));
+    // rectangles.push(new Rectangle({size: createVector(400, 400, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0.00)}));
+    rectangles.push(new Rectangle({size: createVector(200, 200, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0.01)}));
+
+    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(00, -250, 100), vel: createVector(0, 0.5, 0), fill: "green"}));
+
+    // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(-200, 0, 200), omega: createVector(0, 0.05, 0), fill: "red"}));
+    // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(200, 0, 200), omega: createVector(0, 0, 0.05), fill: "green"}));
+    // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(200, 0, -200), omega: createVector(0.05, 0), fill: "blue"}));
 }
 
 function draw() 
@@ -30,8 +37,8 @@ function draw()
     previousMousePosition = createVector(pmouseX, pmouseY);
     background(175);
 
-    // calibrateCamera();
-    orbitControl();
+    calibrateCamera();
+    // orbitControl();
 
     rectangles.forEach(rectangle => {
         rectangle.move()
@@ -47,9 +54,23 @@ function draw()
 function calibrateCamera() 
 {
     myCamera.vel.add(myCamera.acc);
-    myCamera.pos.add(myCamera.vel)
+    myCamera.pos.add(myCamera.vel);
+    myCamera.angle.add(myCamera.omega);
+    myCamera.up.add(myCamera.omega);
+    myCamera.omega.add(myCamera.angularAcceleration);
 
-    camera(myCamera.pos.x, myCamera.pos.y, myCamera.pos.z, myCamera.center.x, myCamera.center.y, myCamera.center.z, myCamera.up.x, myCamera.up.y, myCamera.up.z)
+    // console.log(myCamera.up);
+
+
+    camera(myCamera.pos.x, 
+        myCamera.pos.y, 
+        myCamera.pos.z, 
+        myCamera.center.x, 
+        myCamera.center.y, 
+        myCamera.center.z, 
+        myCamera.up.x, 
+        myCamera.up.y, 
+        myCamera.up.z)
 }
 
 class Rectangle
@@ -72,6 +93,7 @@ class Rectangle
     {
         this.omega.add(this.angularAcceleration);
         this.angle.add(this.omega);
+
         this.vel.add(this.acc);
         this.pos.add(this.vel);
     }
