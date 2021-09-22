@@ -19,12 +19,13 @@ function setup()
         up: createVector(0, 1, 0),
         angle: createVector(0, 0, 0),
         omega: createVector(0, 0, 0),
+        angle: 0.01,
         angularAcceleration: createVector(0, 0, 0)};
 
-    // rectangles.push(new Rectangle({size: createVector(400, 400, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0.00)}));
+    // rectangles.push(new Rectangle({size: createVector(400, 400, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0)}));
     rectangles.push(new Rectangle({size: createVector(200, 200, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0.01)}));
 
-    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(00, -250, 100), vel: createVector(0, 0.5, 0), fill: "green"}));
+    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(0, -250, 100), vel: createVector(0, 0.5, 0), fill: "green"}));
 
     // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(-200, 0, 200), omega: createVector(0, 0.05, 0), fill: "red"}));
     // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(200, 0, 200), omega: createVector(0, 0, 0.05), fill: "green"}));
@@ -36,6 +37,8 @@ function draw()
     mousePosition = createVector(mouseX, mouseY);
     previousMousePosition = createVector(pmouseX, pmouseY);
     background(175);
+
+    // line(30, 20, 85, 75) 
 
     calibrateCamera();
     // orbitControl();
@@ -53,11 +56,13 @@ function draw()
 
 function calibrateCamera() 
 {
-    myCamera.vel.add(myCamera.acc);
-    myCamera.pos.add(myCamera.vel);
-    myCamera.angle.add(myCamera.omega);
-    myCamera.up.add(myCamera.omega);
-    myCamera.omega.add(myCamera.angularAcceleration);
+    // myCamera.vel.add(myCamera.acc);
+    // myCamera.pos.add(myCamera.vel);
+    // myCamera.angle.add(myCamera.omega);
+    // myCamera.up.add(myCamera.omega);
+    // myCamera.omega.add(myCamera.angularAcceleration);
+
+    myCamera.up.rotate(myCamera.angle);
 
     // console.log(myCamera.up);
 
@@ -129,6 +134,8 @@ class Spheroid
         this.omega = props.omega || createVector(0, 0, 0); 
         this.angularAcceleration = props.angularAcceleration || createVector(0, 0, 0);
 
+        this.previousPositions = [props.pos]
+
         this.stroke = props.stroke || "black";
         this.fill = props.fill || "white";
     }
@@ -139,6 +146,13 @@ class Spheroid
         this.angle.add(this.omega);
         this.vel.add(this.acc);
         this.pos.add(this.vel);
+
+        if (frameCount % 30 == 0) 
+        {
+            let newPosition = createVector(this.pos.z, this.pos.y, this.pos.x)
+            this.previousPositions.push(newPosition)
+        }
+        
     }
 
     display()
@@ -161,5 +175,31 @@ class Spheroid
         rotateZ(this.omega.z);
 
         pop()
+
+        push()
+        stroke(0)
+
+        for (let i = 0; i < this.previousPositions.length - 1; i++) 
+        {
+            let thisPoint = this.previousPositions[i].copy().add(createVector(10, 0, 10));
+            let nextPoint = this.previousPositions[i + 1].copy().add(createVector(10, 0, 10));
+            drawLine(thisPoint.x, thisPoint.y, thisPoint.z, nextPoint.x, nextPoint.y, nextPoint.z)
+            
+        }
+        // this.previousPositions.forEach((position, i) => {
+            
+        //     if
+
+
+        // })
+        pop()
     }
 }
+
+function drawLine(x1, y1, z1, x2,y2, z2)
+{
+    beginShape();
+    vertex(x1,y1,z1);
+    vertex(x2,y2,z2);  
+    endShape();
+  }
