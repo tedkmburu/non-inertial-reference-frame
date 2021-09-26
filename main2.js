@@ -4,6 +4,7 @@ let boxes = [];
 
 let rectangles = [];
 let spheroids = [];
+let arrows = [];
 let myCamera;
 
 
@@ -26,6 +27,8 @@ function setup()
     rectangles.push(new Rectangle({size: createVector(200, 200, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0.01)}));
 
     spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(0, -250, 100), vel: createVector(0, 1, 0), omega: createVector(0, 0, 0.01), fill: "red"}));
+
+    // arrows.push(new Arrow({startPos: createVector(0, 0, 0), endPos: createVector(100,100,100) }));
 
     // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(-200, 0, 200), omega: createVector(0, 0.05, 0), fill: "red"}));
     // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(200, 0, 200), omega: createVector(0, 0, 0.05), fill: "green"}));
@@ -52,6 +55,10 @@ function draw()
         spheroid.move()
         spheroid.display()
     });
+
+    arrows.forEach(arrow => {
+        arrow.display()
+    });
 }
 
 function calibrateCamera() 
@@ -76,6 +83,31 @@ function calibrateCamera()
         myCamera.up.x, 
         myCamera.up.y, 
         myCamera.up.z)
+}
+
+class Arrow
+{
+    constructor(props)
+    {
+        this.startPos = props.startPos;
+        this.endPos = props.endPos;
+        this.color = props.color || "red";
+        this.text = props.text;
+    }
+
+    display()
+    {
+        push()
+        translate(this.endPos)
+        fill(this.color)
+        cone(20, 30)
+        
+
+        // translate(p5.Vector.div(this.startPos, 2))
+        cylinder(10, p5.Vector.sub(this.endPos, this.startPos).mag())
+
+        pop()
+    }
 }
 
 class Rectangle
@@ -137,6 +169,8 @@ class Spheroid
         this.corAcc = props.corAcc || createVector(0, 0, 0);
         this.centAcc = props.centAcc || createVector(0, 0, 0);
 
+        this.arrow = new Arrow({startPos: this.pos, endPos: this.acc});
+
         this.previousPositions = [props.pos]
 
         this.stroke = props.stroke || "black";
@@ -160,6 +194,8 @@ class Spheroid
 
         this.vel.add(this.acc);
         this.pos.add(this.vel);
+
+        this.arrow.display()
 
         if (frameCount % 30 == 0) 
         {
