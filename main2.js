@@ -25,7 +25,7 @@ function setup()
     // rectangles.push(new Rectangle({size: createVector(400, 400, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0)}));
     rectangles.push(new Rectangle({size: createVector(200, 200, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0.01)}));
 
-    spheroids.push(new Spheroid({centAcc: createVector(0, 0, 0), corAcc: createVector(0.02, 0.25, 0), size: createVector(25, 25, 25), pos: createVector(0, -250, 100), vel: createVector(0, 1, 0), fill: "green"}));
+    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(0, -250, 100), vel: createVector(0, 1, 0), omega: createVector(0, 0, 0.01), fill: "red"}));
 
     // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(-200, 0, 200), omega: createVector(0, 0.05, 0), fill: "red"}));
     // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(200, 0, 200), omega: createVector(0, 0, 0.05), fill: "green"}));
@@ -133,7 +133,7 @@ class Spheroid
         this.angle = props.angle || createVector(0, 0, 0)
         this.omega = props.omega || createVector(0, 0, 0); 
         this.angularAcceleration = props.angularAcceleration || createVector(0, 0, 0);
-        
+
         this.corAcc = props.corAcc || createVector(0, 0, 0);
         this.centAcc = props.centAcc || createVector(0, 0, 0);
 
@@ -145,22 +145,21 @@ class Spheroid
 
     move()
     {
-        this.omega.add(this.angularAcceleration);
-        this.angle.add(this.omega);
-        this.vel.add(this.acc);
-        this.pos.add(this.vel);
+        // this.omega.add(this.angularAcceleration);
+        // this.angle.add(this.omega);
+        
 
         // a_cor = 2v x omega
         // a_cent = (omega)^2 rho rho_hat
         this.corAcc = p5.Vector.mult(this.vel, 2).cross(this.omega)
 
-        this.centAcc = p5.Vector.mult(createVector(this.pos.x, 0, 0) , p5.Vector.dot(this.omega, this.omega))
+        this.centAcc = p5.Vector.mult(createVector(this.pos.x, this.pos.y, 0) , p5.Vector.dot(this.omega, this.omega))
 
-        this.omega.add(p5.Vector.div(this.corAcc, 1));
-        this.omega.add(p5.Vector.div(this.centAcc, 1));
-        // this.
+        this.acc.add(p5.Vector.div(this.corAcc, 10000));
+        this.acc.add(p5.Vector.div(this.centAcc, 10000));
 
-
+        this.vel.add(this.acc);
+        this.pos.add(this.vel);
 
         if (frameCount % 30 == 0) 
         {
