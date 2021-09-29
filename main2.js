@@ -195,7 +195,7 @@ class Spheroid
         this.vel.add(this.acc);
         this.pos.add(this.vel);
 
-        this.arrow.display()
+        // this.arrow.display()
 
         if (frameCount % 30 == 0) 
         {
