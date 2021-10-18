@@ -12,6 +12,7 @@ function setup()
 {
     createCanvas(innerWidth, innerHeight, WEBGL);
 
+    rectMode(CENTER)
     myCamera = {
         pos: createVector(0, 0, (innerHeight/2) / tan(Math.PI/6)),
         vel: createVector(0, 0, 0), 
@@ -26,7 +27,7 @@ function setup()
     // rectangles.push(new Rectangle({size: createVector(400, 400, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0)}));
     rectangles.push(new Rectangle({size: createVector(200, 200, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0.01)}));
 
-    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(0, -250, 100), vel: createVector(0, 1, 0), omega: createVector(0, 0, 0.01), fill: "red"}));
+    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(0, -250, 100), vel: createVector(0, 0, 0), omega: createVector(0, 0, 0.01), fill: "red"}));
 
     // arrows.push(new Arrow({startPos: createVector(0, 0, 0), endPos: createVector(100,100,100) }));
 
@@ -37,9 +38,12 @@ function setup()
 
 function draw() 
 {
+    // angleMode(DEGREES); 
+    // frameRate(5)
     mousePosition = createVector(mouseX, mouseY);
     previousMousePosition = createVector(pmouseX, pmouseY);
     background(175);
+    frameRate(60);
 
     // line(30, 20, 85, 75) 
 
@@ -185,23 +189,26 @@ class Spheroid
 
         // a_cor = 2v x omega
         // a_cent = (omega)^2 rho rho_hat
-        this.corAcc = p5.Vector.mult(this.vel, 2).cross(this.omega)
+        this.corAcc = p5.Vector.mult(this.vel, -2).cross(this.omega)
 
         this.centAcc = p5.Vector.mult(createVector(this.pos.x, this.pos.y, 0) , p5.Vector.dot(this.omega, this.omega))
 
-        this.acc.add(p5.Vector.div(this.corAcc, 10000));
-        this.acc.add(p5.Vector.div(this.centAcc, 10000));
+        this.acc.add(p5.Vector.div(this.corAcc, 1));
+        this.acc.add(p5.Vector.div(this.centAcc, 1));
 
         this.vel.add(this.acc);
         this.pos.add(this.vel);
 
+        console.log(frameCount);
+        console.table(this);
+
         // this.arrow.display()
 
-        if (frameCount % 30 == 0) 
-        {
-            let newPosition = createVector(this.pos.z, this.pos.y, this.pos.x)
-            this.previousPositions.push(newPosition)
-        }
+        // if (frameCount % 30 == 0) 
+        // {
+        //     let newPosition = createVector(this.pos.z, this.pos.y, this.pos.x)
+        //     this.previousPositions.push(newPosition)
+        // }
         
     }
 

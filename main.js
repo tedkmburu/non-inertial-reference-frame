@@ -34,9 +34,11 @@ function setup()
 
 function draw() 
 {
+    // angleMode(DEGREES); 
     mousePosition = createVector(mouseX, mouseY);
     previousMousePosition = createVector(pmouseX, pmouseY);
     background(175);
+    frameRate(60);
 
     // line(30, 20, 85, 75) 
 
@@ -75,7 +77,7 @@ function calibrateCamera()
         myCamera.center.z, 
         myCamera.up.x, 
         myCamera.up.y, 
-        myCamera.up.z)
+        myCamera.up.z);
 }
 
 class Rectangle
@@ -152,13 +154,15 @@ class Spheroid
 
         // a_cor = 2v x omega
         // a_cent = (omega)^2 rho rho_hat
-        this.corAcc = p5.Vector.mult(this.vel, 2).cross(this.omega)
+        // this.corAcc = p5.Vector.mult(this.vel, 2).cross(this.omega)
 
-        this.centAcc = p5.Vector.mult(createVector(this.pos.x, 0, 0) , p5.Vector.dot(this.omega, this.omega))
+        // this.centAcc = p5.Vector.mult(createVector(this.pos.x, 0, 0) , p5.Vector.dot(this.omega, this.omega))
 
-        this.omega.add(p5.Vector.div(this.corAcc, 1));
-        this.omega.add(p5.Vector.div(this.centAcc, 1));
-        // this.
+        // this.omega.add(p5.Vector.div(this.corAcc, 10000));
+        // this.omega.add(p5.Vector.div(this.centAcc, 10000));
+
+        console.log(frameCount);
+        console.table(this);
 
 
 
@@ -217,4 +221,4 @@ function drawLine(x1, y1, z1, x2,y2, z2)
     vertex(x1,y1,z1);
     vertex(x2,y2,z2);  
     endShape();
-  }
+}
