@@ -43,7 +43,7 @@ function draw()
     mousePosition = createVector(mouseX, mouseY);
     previousMousePosition = createVector(pmouseX, pmouseY);
     background(175);
-    frameRate(60);
+    frameRate(1);
 
     // line(30, 20, 85, 75) 
 
@@ -189,7 +189,7 @@ class Spheroid
 
         // a_cor = 2v x omega
         // a_cent = (omega)^2 rho rho_hat
-        this.corAcc = p5.Vector.mult(this.vel, -2).cross(this.omega)
+        this.corAcc = p5.Vector.mult(this.vel, 2).cross(this.omega)
 
         this.centAcc = p5.Vector.mult(createVector(this.pos.x, this.pos.y, 0) , p5.Vector.dot(this.omega, this.omega))
 
@@ -199,9 +199,6 @@ class Spheroid
         this.vel.add(this.acc);
         this.pos.add(this.vel);
 
-        console.log(frameCount);
-        console.table(this);
-
         // this.arrow.display()
 
         // if (frameCount % 30 == 0) 
@@ -209,6 +206,9 @@ class Spheroid
         //     let newPosition = createVector(this.pos.z, this.pos.y, this.pos.x)
         //     this.previousPositions.push(newPosition)
         // }
+
+        console.log(frameCount);
+        console.log([this.acc.x, this.acc.y, this.acc.z]);
         
     }
 

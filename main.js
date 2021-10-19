@@ -38,7 +38,7 @@ function draw()
     mousePosition = createVector(mouseX, mouseY);
     previousMousePosition = createVector(pmouseX, pmouseY);
     background(175);
-    frameRate(60);
+    frameRate(1);
 
     // line(30, 20, 85, 75) 
 
@@ -147,6 +147,9 @@ class Spheroid
 
     move()
     {
+        console.log(frameCount);
+        console.table(this);
+        
         this.omega.add(this.angularAcceleration);
         this.angle.add(this.omega);
         this.vel.add(this.acc);
@@ -161,8 +164,7 @@ class Spheroid
         // this.omega.add(p5.Vector.div(this.corAcc, 10000));
         // this.omega.add(p5.Vector.div(this.centAcc, 10000));
 
-        console.log(frameCount);
-        console.table(this);
+        
 
 
 
