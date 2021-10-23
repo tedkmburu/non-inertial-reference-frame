@@ -12,7 +12,8 @@ function setup()
 {
     createCanvas(innerWidth, innerHeight, WEBGL);
 
-    rectMode(CENTER)
+    rectMode(CENTER);
+    ellipseMode(CENTER);
     myCamera = {
         pos: createVector(0, 0, (innerHeight/2) / tan(Math.PI/6)),
         vel: createVector(0, 0, 0), 
@@ -21,19 +22,15 @@ function setup()
         up: createVector(0, 1, 0),
         angle: createVector(0, 0, 0),
         omega: createVector(0, 0, 0),
-        angle: 0.01,
+        angle: 0.0,
         angularAcceleration: createVector(0, 0, 0)};
 
     // rectangles.push(new Rectangle({size: createVector(400, 400, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0)}));
-    rectangles.push(new Rectangle({size: createVector(200, 200, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0.01)}));
+    rectangles.push(new Rectangle({size: createVector(200, 200, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0.0)}));
 
-    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(0, -250, 100), vel: createVector(0, 0, 0), omega: createVector(0, 0, 0.01), fill: "red"}));
+    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(0, -250, 100), vel: createVector(0, 0, 0), omega: createVector(0, 0, 0.0), fill: "red"}));
 
     // arrows.push(new Arrow({startPos: createVector(0, 0, 0), endPos: createVector(100,100,100) }));
-
-    // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(-200, 0, 200), omega: createVector(0, 0.05, 0), fill: "red"}));
-    // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(200, 0, 200), omega: createVector(0, 0, 0.05), fill: "green"}));
-    // spheroids.push(new Spheroid({size: createVector(50, 50, 50), pos: createVector(200, 0, -200), omega: createVector(0.05, 0), fill: "blue"}));
 }
 
 function draw() 
@@ -43,7 +40,7 @@ function draw()
     mousePosition = createVector(mouseX, mouseY);
     previousMousePosition = createVector(pmouseX, pmouseY);
     background(175);
-    frameRate(1);
+    frameRate(60);
 
     // line(30, 20, 85, 75) 
 
@@ -191,10 +188,13 @@ class Spheroid
         // a_cent = (omega)^2 rho rho_hat
         this.corAcc = p5.Vector.mult(this.vel, 2).cross(this.omega)
 
-        this.centAcc = p5.Vector.mult(createVector(this.pos.x, this.pos.y, 0) , p5.Vector.dot(this.omega, this.omega))
+        this.centAcc = p5.Vector.mult(createVector(this.pos.x, this.pos.y, this.pos.z) , p5.Vector.dot(this.omega, this.omega))
 
-        this.acc.add(p5.Vector.div(this.corAcc, 1));
-        this.acc.add(p5.Vector.div(this.centAcc, 1));
+        // this.acc.add(p5.Vector.div(this.corAcc, 10000));
+        // this.acc.add(p5.Vector.div(this.centAcc, 10000));
+
+        this.acc = p5.Vector.add(this.corAcc, this.centAcc);
+        this.acc.div(1)
 
         this.vel.add(this.acc);
         this.pos.add(this.vel);
@@ -207,8 +207,8 @@ class Spheroid
         //     this.previousPositions.push(newPosition)
         // }
 
-        console.log(frameCount);
-        console.log([this.acc.x, this.acc.y, this.acc.z]);
+        // console.log(frameCount);
+        // console.table(this);
         
     }
 
@@ -249,6 +249,9 @@ class Spheroid
 
 
         // })
+
+        new Arrow({startPos: this.pos, endPos: this.acc}).display()
+
         pop()
     }
 }
