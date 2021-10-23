@@ -208,7 +208,8 @@ class Spheroid
         // }
 
         console.log(frameCount);
-        console.log([this.acc.x, this.acc.y, this.acc.z]);
+        // console.log([this.acc.x, this.acc.y, this.acc.z]);
+        console.table(this);
         
     }
 
