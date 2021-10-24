@@ -11,10 +11,14 @@ let buttons = [];
 let checkBoxes = [];
 let sliders = [];
 
+let play = true;
+
+let omegaValue = 0.005
+
 
 function setup()
 {
-    createCanvas(innerWidth, innerHeight, WEBGL);
+    createCanvas(innerWidth - 300, innerHeight, WEBGL);
 
     rectMode(CENTER);
     ellipseMode(CENTER);
@@ -32,10 +36,12 @@ function setup()
     // rectangles.push(new Rectangle({size: createVector(400, 400, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0)}));
     rectangles.push(new Rectangle({size: createVector(200, 200, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0.0)}));
 
-    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(0, -250, 30), vel: createVector(1, 1, 0), omega: createVector(0, 0, 0.005), fill: "red"}));
+    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(0, -250, 30), vel: createVector(1, 1, 0), omega: createVector(0, 0, omegaValue), fill: "red"}));
 
-
-    createMenu();
+    document.getElementById("mass").value = spheroids[0].mass;
+    document.getElementById("velX").value = spheroids[0].startingVel.x;
+    document.getElementById("velY").value = spheroids[0].startingVel.y;
+    document.getElementById("velZ").value = spheroids[0].startingVel.z;
 }
 
 function draw() 
@@ -60,18 +66,26 @@ function draw()
     });
 
     spheroids.forEach(spheroid => {
-        spheroid.move()
-        spheroid.display()
+        if (play) 
+        {
+            spheroid.move();
+        }
+        
+        spheroid.display();
     });
 
     arrows.forEach(arrow => {
         arrow.display()
     });
 
-    push()
-        fill("red")
-        rect(100,100,100,100)
-    pop()
+    // push()
+    //     fill("red")
+    //     rect(100,100,100,100)
+    // pop()
+
+
+    document.getElementById("cent").innerHTML = "<" + spheroids[0].centForce.x.toFixed(3) + ", " + spheroids[0].centForce.y.toFixed(3) + ", " + spheroids[0].centForce.z.toFixed(3) + ">";
+    document.getElementById("cor").innerHTML =  "<" + spheroids[0].corForce.x.toFixed(3) + ", " + spheroids[0].corForce.y.toFixed(3) + ", " + spheroids[0].corForce.z.toFixed(3) + ">";
 }
 
 function calibrateCamera() 
@@ -188,8 +202,8 @@ class Spheroid
         this.omega = props.omega || createVector(0, 0, 0); 
         this.angularAcceleration = props.angularAcceleration || createVector(0, 0, 0);
 
-        this.corAcc = props.corAcc || createVector(0, 0, 0);
-        this.centAcc = props.centAcc || createVector(0, 0, 0);
+        this.corForce = props.corForce || createVector(0, 0, 0);
+        this.centForce = props.centForce || createVector(0, 0, 0);
 
         // this.arrow = new Arrow({startPos: this.pos, endPos: this.corAcc, color: "blue"});
         // this.arrow = new Arrow({startPos: this.pos, endPos: this.centAcc, color: "green"});
@@ -208,14 +222,14 @@ class Spheroid
 
         // a_cor = 2v x omega
         // a_cent = (omega)^2 rho rho_hat
-        this.corAcc = p5.Vector.mult(p5.Vector.cross(this.omega, this.vel), (2 * this.mass));
+        this.corForce = p5.Vector.mult(p5.Vector.cross(this.omega, this.vel), (2 * this.mass));
 
-        this.centAcc = p5.Vector.mult(p5.Vector.cross(this.omega, this.pos), this.mass).cross(this.omega)
+        this.centForce = p5.Vector.mult(p5.Vector.cross(this.omega, this.pos), this.mass).cross(this.omega)
 
         // this.acc.add(p5.Vector.div(this.corAcc, 10000));
         // this.acc.add(p5.Vector.div(this.centAcc, 10000));
 
-        this.acc = p5.Vector.add(this.corAcc, this.centAcc);
+        this.acc = p5.Vector.add(this.corForce, this.centForce).div(this.mass);
         // this.acc.div(1)
 
         this.vel.add(this.acc);
@@ -223,9 +237,9 @@ class Spheroid
 
         // this.arrow.display()
 
-        if (frameCount % 30 == 0) 
+        if (frameCount % 15 == 0) 
         {
-            let newPosition = createVector(this.pos.z, this.pos.y, this.pos.x)
+            let newPosition = createVector(this.pos.x, this.pos.y, this.pos.z)
             this.previousPositions.push(newPosition)
         }
 
@@ -250,8 +264,8 @@ class Spheroid
 
         ellipsoid(this.size.x, this.size.y, this.size.z);
 
-        new Arrow({arrow: p5.Vector.mult(this.corAcc, 10000), color: "blue"}).display();
-        new Arrow({arrow: p5.Vector.mult(this.centAcc, 10000), color: "green"}).display();
+        new Arrow({arrow: p5.Vector.mult(this.corForce, 10000), color: "blue"}).display();
+        new Arrow({arrow: p5.Vector.mult(this.centForce, 10000), color: "green"}).display();
 
         rotateX(this.omega.x);
         rotateY(this.omega.y);
@@ -301,6 +315,8 @@ class Spheroid
         this.vel = this.startingVel.copy(); 
         this.pos = this.startingPos.copy(); 
 
+        this.omega = createVector(0, 0, omegaValue)
+
         this.previousPositions = [this.pos]
     }
 }
@@ -311,9 +327,34 @@ function drawLine(x1, y1, z1, x2,y2, z2)
     vertex(x1,y1,z1);
     vertex(x2,y2,z2);  
     endShape();
-  }
+}
 
-function createMenu() 
+function menuInput()
 {
-    buttons.push(new Button({pos: createVector(0,0)}))    
+    spheroids[0].mass = parseInt(document.getElementById("mass").value);
+    spheroids[0].startingVel.x = parseInt(document.getElementById("velX").value);
+    spheroids[0].startingVel.y = parseInt(document.getElementById("velY").value);
+    spheroids[0].startingVel.z = parseInt(document.getElementById("velZ").value);
+
+    omegaValue = parseFloat(document.getElementById("omega").value);
+}
+
+function resetAll()
+{
+    spheroids.forEach(sphere => {
+        sphere.reset()
+    })
+}
+
+function togglePlay()
+{
+    play = !play;
+
+    if (play) {
+        document.getElementById("play").value = "Play";
+    }
+    else
+    {
+        document.getElementById("play").value = "Pause";
+    }
 }
