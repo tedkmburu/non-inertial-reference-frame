@@ -23,3 +23,13 @@ canvas
   height: 100%;
 }
 
+.menu
+{
+  background-color: white;
+  width: 250px;
+  padding: 25px;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+}

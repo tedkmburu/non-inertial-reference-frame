@@ -8,6 +8,45 @@
     </head>
     <body oncontextmenu="return false">
 
+    <div class="menu">
+        <input type="button" value="Play" id="play" onclick="togglePlay()">
+        <br>
+        <input type="button" value="reset" onclick="resetAll()">
+        <br>
+        <label for="mass">Mass: </label>
+        <input type="range" id="mass" value="" min="1" max="10" step="1" oninput="menuInput()">
+        <br>
+
+
+        <br>
+        <label for="velX">initial Vel x: </label>
+        <input type="range" id="velX" value="" min="0" max="10" step="1" oninput="menuInput()">
+        <br>
+
+        <br>
+        <label for="velY">initial Vel y: </label>
+        <input type="range" id="velY" value="" min="0" max="10" step="1" oninput="menuInput()">
+        <br>
+
+        <br>
+        <label for="velZ">initial Vel z: </label>
+        <input type="range" id="velZ" value="" min="0" max="10" step="1" oninput="menuInput()">
+        <br>
+
+
+
+
+        <br>
+        <label for="velZ">omega: </label>
+        <input type="range" id="omega" value="" min="0" max="0.01" step="0.001" oninput="menuInput()">
+        <br>
+      
+
+        F = F_0 + F_cor + F_cf
+        <br>
+        F = 0 + <output id="cor">0</output> + <output id="cent">0</output>
+    </div>
+
     </body>
 
     <script src="p5.min.js"></script>
