@@ -40,13 +40,13 @@ function setup()
         up: createVector(0, 1, 0),
         angle: createVector(0, 0, 0),
         omega: createVector(0, 0, 0),
-        angle: 0.005,
+        angle: 0.0,
         angularAcceleration: createVector(0, 0, 0)};
 
     // rectangles.push(new Rectangle({size: createVector(400, 400, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0)}));
-    rectangles.push(new Rectangle({size: createVector(200, 200, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, omegaValue)}));
+    rectangles.push(new Rectangle({size: createVector(200, 200, 10), pos: createVector(0, 0, 0), omega: createVector(0, 0, 0.0)}));
 
-    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(-100, -100, 30), vel: createVector(1, 1, 0), omega: createVector(0, 0, 0), fill: "red"}));
+    spheroids.push(new Spheroid({size: createVector(25, 25, 25), pos: createVector(0, -250, 30), vel: createVector(1, 1, 0), omega: createVector(0, 0, omegaValue), fill: "red"}));
 
     document.getElementById("mass").value = spheroids[0].mass;
     document.getElementById("velX").value = spheroids[0].startingVel.x;
@@ -71,11 +71,7 @@ function draw()
     orbitControl();
 
     rectangles.forEach(rectangle => {
-        if (play) 
-        {
-            rectangle.move();
-        }
-
+        // rectangle.move()
         rectangle.display()
     });
 
@@ -107,13 +103,13 @@ function draw()
     {
         roomAngle--
     }
-    // push()
-    //     translate(0,0,-100);
-    //     rotateX(Math.PI / 2);
-    //     rotateY(roomAngle / 100);
-    //     scale(2);
-    //     model(room);
-    // pop()
+    push()
+        translate(0,0,-100);
+        rotateX(Math.PI / 2);
+        rotateY(roomAngle / 100);
+        scale(2);
+        model(room);
+    pop()
 
     document.getElementById("cent").innerHTML = "<" + spheroids[0].centForce.x.toFixed(3) + ", " + spheroids[0].centForce.y.toFixed(3) + ", " + spheroids[0].centForce.z.toFixed(3) + ">";
     document.getElementById("cor").innerHTML =  "<" + spheroids[0].corForce.x.toFixed(3) + ", " + spheroids[0].corForce.y.toFixed(3) + ", " + spheroids[0].corForce.z.toFixed(3) + ">";
@@ -187,8 +183,6 @@ class Rectangle
 
         this.stroke = props.stroke || "black";
         this.fill = props.fill || "white";
-
-        this.previousPositions = [props.pos]
     }
 
     move()
@@ -198,12 +192,6 @@ class Rectangle
 
         this.vel.add(this.acc);
         this.pos.add(this.vel);
-
-        if (frameCount % 15 == 0) 
-        {
-            let newPosition = createVector(this.pos.x, this.pos.y, this.pos.z);
-            this.previousPositions.push(newPosition);
-        }
     }
 
     display()
@@ -222,24 +210,6 @@ class Rectangle
         box(this.size.x, this.size.y, this.size.z);
 
         pop()
-
-        this.previousPositions.forEach( position => {
-            // let thisPoint = this.previousPositions[i].copy().add(createVector(10, 0, 10));
-            // let nextPoint = this.previousPositions[i + 1].copy().add(createVector(10, 0, 10));
-            // drawLine(thisPoint.x, thisPoint.y, thisPoint.z, nextPoint.x, nextPoint.y, nextPoint.z)
-
-            push()
-                translate(position);
-
-                fill(this.fill);
-                stroke(this.stroke);
-        
-                let size = this.size.x / 10; 
-                ellipsoid(size, size, size);
-
-                // console.log(position);
-            pop()
-        })
     }
 }
 
@@ -279,8 +249,9 @@ class Spheroid
 
         // a_cor = 2v x omega
         // a_cent = (omega)^2 rho rho_hat
-        this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (2 * this.mass));
-        this.centForce = p5.Vector.mult(p5.Vector.cross(this.pos, this.omega), this.mass).cross(this.omega)
+        this.corForce = p5.Vector.mult(p5.Vector.cross(this.omega, this.vel), (2 * this.mass));
+
+        this.centForce = p5.Vector.mult(p5.Vector.cross(this.omega, this.pos), this.mass).cross(this.omega)
 
         // this.acc.add(p5.Vector.div(this.corAcc, 10000));
         // this.acc.add(p5.Vector.div(this.centAcc, 10000));
@@ -429,3 +400,15 @@ function togglePlay()
         document.getElementById("play").value = "Pause";
     }
 }
+
+
+
+
+// fix vectors
+// split screen
+// lock 2d perspective 
+// change background
+// lock background with omega
+// check fixeed eq with videos
+// apply trajectory to table 
+// differential trajectory relative as seen on/ off the table
