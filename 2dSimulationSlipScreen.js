@@ -13,16 +13,17 @@ let sliders = [];
 
 let play = true;
 
-let omegaValue = 0.005;
+let omegaValue = 0.001;
 let roomAngle = 0;
 
 let grid, leftGrid, rightGrid;
 let room;
 
 let spheroidSize = 25;
-let tableSize = 400;
+let tableSize = 550;
 
-let theInitVel = 2;
+let theInitVelx = 1;
+let theInitVely = 1;
 
 const theFrameRate = 60; 
 
@@ -39,14 +40,14 @@ const leftCanvasObject = canvas => {
         canvas.rectMode(canvas.CENTER);
         canvas.ellipseMode(canvas.CENTER);
         rectangles[0] = new Rectangle({
-            size: canvas.createVector(400, 400), 
+            size: canvas.createVector(tableSize, tableSize), 
             pos: canvas.createVector((innerWidth - 300) / 4, innerHeight / 2), 
             omega: - omegaValue,
             frame: "room",
             canvas: leftCanvas});
         spheroids[0] = new Spheroid({
-            pos: canvas.createVector((innerWidth - 300) / 4, (innerHeight / 4) - 50), 
-            vel: canvas.createVector(theInitVel, theInitVel), 
+            pos: canvas.createVector((innerWidth - 300) / 5, (innerHeight / 4) - 50), 
+            vel: canvas.createVector(theInitVelx, theInitVely), 
             omega: canvas.createVector(0, 0, omegaValue), 
             fill: "red",
             frame: "room",
@@ -94,14 +95,14 @@ const rightCanvasObject = canvas => {
         canvas.rectMode(canvas.CENTER);
         canvas.ellipseMode(canvas.CENTER);
         rectangles[1] = new Rectangle({
-            size: canvas.createVector(400, 400), 
+            size: canvas.createVector(tableSize, tableSize), 
             pos: canvas.createVector((innerWidth - 300) / 4, innerHeight / 2), 
             omega: 0.0,
             frame: "table",
             canvas: rightCanvas});
         spheroids[1] = new Spheroid({
-            pos: canvas.createVector((innerWidth - 300) / 4, (innerHeight / 4) - 50), 
-            vel: canvas.createVector(theInitVel, theInitVel), 
+            pos: canvas.createVector((innerWidth - 300) / 5, (innerHeight / 4) - 50), 
+            vel: canvas.createVector(theInitVelx, theInitVely), 
             omega: canvas.createVector(0, 0, omegaValue), 
             fill: "red",
             frame: "table",
@@ -251,8 +252,8 @@ class Spheroid
     move()
     {
 
-        this.corForce = p5.Vector.mult(p5.Vector.cross(this.omega, this.vel), (2 * this.mass));
-        this.centForce = p5.Vector.mult(p5.Vector.cross(this.omega, this.pos), this.mass).cross(this.omega)
+        this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (2 * this.mass));
+        this.centForce = p5.Vector.mult(p5.Vector.cross(this.pos, this.omega), this.mass).cross(this.omega)
 
         this.acc = p5.Vector.add(this.corForce, this.centForce).div(this.mass);
 
@@ -283,9 +284,11 @@ class Spheroid
             this.canvas.fill("green");
             this.canvas.ellipse(rectangles[0].pos.x, rectangles[0].pos.y, spheroidSize, spheroidSize);
 
-            this.canvas.translate(rectangles[0].pos.x, rectangles[0].pos.y)
-            this.canvas.rotate(rectangles[1].omega * rightCanvas.frameCount)
-            this.canvas.ellipse(thePoint.x, thePoint.y, spheroidSize, spheroidSize);
+            // this.canvas.translate(rectangles[0].pos.x, rectangles[0].pos.y)
+            let angle = rectangles[0].omega * rightCanvas.frameCount * 1;
+            // console.log(angle);
+            // this.canvas.rotate(angle)
+            this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize, spheroidSize);
 
             
         }
@@ -300,7 +303,6 @@ class Spheroid
         {
             createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.corForce, 10000)), this.corForce.heading(), "blue", 1, this.canvas);
             createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.centForce, 10000)), this.centForce.heading(), "green", 1, this.canvas);
-
         }
         
         this.canvas.pop()
