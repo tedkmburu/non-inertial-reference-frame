@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+      <title>Non-Interial Reference Frame Simulation</title>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="indexSplit.css">
+      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    </head>
+    <body oncontextmenu="return false">
+
+    <div class="menu">
+        <input type="button" value="Play" id="play" onclick="togglePlay()">
+        <br><br>
+        <input type="button" value="Reset" onclick="resetAll()">
+        <br>
+        <label for="mass">Mass: </label>
+        <input type="range" id="mass" value="" min="1" max="10" step="1" oninput="menuInput()">
+        <br>
+
+
+        <br>
+        <label for="velX">initial Vel x: </label>
+        <input type="range" id="velX" value="" min="0" max="10" step="1" oninput="menuInput()">
+        <br>
+
+        <br>
+        <label for="velY">initial Vel y: </label>
+        <input type="range" id="velY" value="" min="0" max="10" step="1" oninput="menuInput()">
+        <br>
+
+        <!-- <br>
+        <label for="velZ">initial Vel z: </label>
+        <input type="range" id="velZ" value="" min="0" max="10" step="1" oninput="menuInput()">
+        <br> -->
+
+
+
+
+        <br>
+        <label for="velZ">omega: </label>
+        <input type="range" id="omega" value="" min="0" max="0.01" step="0.001" oninput="menuInput()">
+        <br>
+      
+
+        F = F_0 + F_cor + F_cf
+        <br>
+        F = 0 + <output id="cor">0</output> + <output id="cent">0</output>
+
+        <br>
+        <br>
+
+        <input type="radio" id="frame" name="frame" value="ball" oninput="menuInput()"/>
+        <label for="age1">Ball</label><br>
+
+        <input type="radio" id="frame" name="frame" value="table"  oninput="menuInput()"/>
+        <label for="age1">Table</label><br>
+
+        <input type="radio" id="frame" name="frame" value="room"  oninput="menuInput()"/>
+        <label for="age1">Room</label><br>
+
+      </div>
+    </div>
+
+    </body>
+
+    <script src="p5.min.js"></script>
+
+    <script src="2dSimulationSlipScreen.js"></script>
+    <script src="mouseKeyboardEvents.js"></script>
+    <script src="checkbox.js"></script>
+    <script src="button.js"></script>
+    
+   
+   <!-- <script src="https://kit.fontawesome.com/5ab7058819.js" crossorigin="anonymous"></script> -->
+</html>
