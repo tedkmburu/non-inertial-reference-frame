@@ -13,7 +13,7 @@ let sliders = [];
 
 let play = true;
 
-let omegaValue = 0.001;
+let omegaValue = 0.005;
 let roomAngle = 0;
 
 let grid, leftGrid, rightGrid;
@@ -22,7 +22,7 @@ let room;
 let spheroidSize = 25;
 let tableSize = 550;
 
-let theInitVelx = 1;
+let theInitVelx = 3;
 let theInitVely = 1;
 
 const theFrameRate = 60; 
@@ -32,7 +32,7 @@ const leftCanvasObject = canvas => {
     canvas.setup = function()  // This function only runs once when the page first loads. 
     {
         canvas.createCanvas((innerWidth - 300) / 2, innerHeight); // creates the <canvas> that everything runs on.
-        let cnv = canvas.createCanvas((innerWidth - 300) / 2, innerHeight); // creates the <canvas> that everything runs on.
+        let cnv = canvas.createCanvas(innerWidth / 2, innerHeight); // creates the <canvas> that everything runs on.
         cnv.addClass('left');
         leftCanvas = canvas;
         canvas.angleMode(canvas.RADIANS);
@@ -89,7 +89,7 @@ const rightCanvasObject = canvas => {
     canvas.preload = function() { rightGrid = canvas.loadImage('grid.png'); }
     canvas.setup = function()  // This function only runs once when the page first loads. 
     {
-        let cnv = canvas.createCanvas((innerWidth - 300) / 2, innerHeight); // creates the <canvas> that everything runs on.
+        let cnv = canvas.createCanvas(innerWidth / 2, innerHeight); // creates the <canvas> that everything runs on.
         cnv.addClass('right');
         rightCanvas = canvas;
         canvas.angleMode(canvas.RADIANS);
@@ -131,7 +131,12 @@ const rightCanvasObject = canvas => {
 
         canvas.text("Table Frame", canvas.width / 2, 20)
         document.getElementById("cent").innerHTML = "<" + spheroids[0].centForce.x.toFixed(3) + ", " + spheroids[0].centForce.y.toFixed(3) + ">";
-    document.getElementById("cor").innerHTML =  "<" + spheroids[0].corForce.x.toFixed(3) + ", " + spheroids[0].corForce.y.toFixed(3) + ">";
+        document.getElementById("cor").innerHTML =  "<" + spheroids[0].corForce.x.toFixed(3) + ", " + spheroids[0].corForce.y.toFixed(3) + ">";
+
+        if (spheroids[1].pos.x < 0 || spheroids[1].pos.x > innerWidth / 2) 
+        {
+            togglePlay(false);
+        }
     }
   
     canvas.windowResized = function() // inbuilt p5 function. runs everytime the window is resized
@@ -290,7 +295,7 @@ class Spheroid
             let thePoint = p5.Vector.sub(this.pos, rectangles[0].pos)
             // this.canvas.ellipse(thePoint.x,  thePoint.y, size, size);
 
-            this.canvas.fill("green");
+            this.canvas.fill("white");
             this.canvas.ellipse(rectangles[0].pos.x, rectangles[0].pos.y, spheroidSize, spheroidSize);
 
             // this.canvas.translate(rectangles[0].pos.x, rectangles[0].pos.y)
@@ -312,7 +317,7 @@ class Spheroid
         {
             createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.corForce, 10000)), this.corForce.heading(), "blue", 1, this.canvas);
             createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.centForce, 10000)), this.centForce.heading(), "green", 1, this.canvas);
-            createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.vel, 10000)), this.vel.heading(), "red", 1, this.canvas);
+            createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.vel, 100)), this.vel.heading(), "red", 1, this.canvas);
 
         }
         
@@ -387,17 +392,29 @@ function resetAll()
     })
 }
 
-function togglePlay()
+function togglePlay(state)
 {
-    play = !play;
+    if (state == undefined || state == null) 
+    {
+        play = !play;
 
-    if (play) {
-        document.getElementById("play").value = "Play";
+        if (play) 
+        {
+            document.getElementById("play").value = "Play";
+        }
+        else
+        {
+            document.getElementById("play").value = "Pause";
+        }
     }
     else
     {
-        document.getElementById("play").value = "Pause";
+        play = state; 
+        document.getElementById("play").value = state ? "Pause" : "Play";
     }
+    
+
+    
 }
 
 function createArrow(start, end, angle, color, scale, canvas)

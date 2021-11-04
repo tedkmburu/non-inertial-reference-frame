@@ -8,7 +8,7 @@ canvas.right
 {
     position: fixed;
     top: 0;
-    right: 300px;
+    right: 0;
 }
 
 body, html
@@ -38,11 +38,22 @@ canvas
 
 .menu
 {
-  background-color: white;
-  width: 250px;
-  padding: 25px;
-  height: 100%;
+  background-color: rgba(255, 255, 255, 1);
+  width: 20%;
+  padding: 2.5%;
+  height: 15%;
   position: fixed;
-  top: 0;
-  right: 0;
+  bottom: 5%;
+  right: 37.5%;
+  z-index: 999;
+  transition: 0.25s border ease;
+  opacity: 0.75;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 5px;
+}
+
+.menu:hover
+{
+    opacity: 1;
+    border: 1px solid black;
 }
