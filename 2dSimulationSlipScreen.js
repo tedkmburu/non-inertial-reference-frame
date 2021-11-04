@@ -13,17 +13,17 @@ let sliders = [];
 
 let play = true;
 
-let omegaValue = 0.005;
+let omegaValue = 0.001;
 let roomAngle = 0;
 
 let grid, leftGrid, rightGrid;
 let room;
 
 let spheroidSize = 25;
-let tableSize = 500;
+let tableSize = 550;
 
-let theInitVelx = 2;
-let theInitVely = 2;
+let theInitVelx = 1;
+let theInitVely = 1;
 
 const theFrameRate = 60; 
 
@@ -46,7 +46,7 @@ const leftCanvasObject = canvas => {
             frame: "room",
             canvas: leftCanvas});
         spheroids[0] = new Spheroid({
-            pos: canvas.createVector((innerWidth - 300) / 4, (innerHeight / 4) - 50), 
+            pos: canvas.createVector((innerWidth - 300) / 5, (innerHeight / 4) - 50), 
             vel: canvas.createVector(theInitVelx, theInitVely), 
             omega: canvas.createVector(0, 0, omegaValue), 
             fill: "red",
@@ -103,7 +103,7 @@ const rightCanvasObject = canvas => {
             frame: "table",
             canvas: rightCanvas});
         spheroids[1] = new Spheroid({
-            pos: canvas.createVector((innerWidth - 300) / 4, (innerHeight / 4) - 50), 
+            pos: canvas.createVector((innerWidth - 300) / 5, (innerHeight / 4) - 50), 
             vel: canvas.createVector(theInitVelx, theInitVely), 
             omega: canvas.createVector(0, 0, omegaValue), 
             fill: "red",
@@ -293,9 +293,11 @@ class Spheroid
             this.canvas.fill("green");
             this.canvas.ellipse(rectangles[0].pos.x, rectangles[0].pos.y, spheroidSize, spheroidSize);
 
-            this.canvas.translate(rectangles[0].pos.x, rectangles[0].pos.y)
-            this.canvas.rotate(rectangles[1].omega * rightCanvas.frameCount)
-            this.canvas.ellipse(thePoint.x, thePoint.y, spheroidSize, spheroidSize);
+            // this.canvas.translate(rectangles[0].pos.x, rectangles[0].pos.y)
+            let angle = rectangles[0].omega * rightCanvas.frameCount * 1;
+            // console.log(angle);
+            // this.canvas.rotate(angle)
+            this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize, spheroidSize);
 
             
         }
