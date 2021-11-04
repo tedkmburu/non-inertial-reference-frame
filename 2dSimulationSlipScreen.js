@@ -20,9 +20,10 @@ let grid, leftGrid, rightGrid;
 let room;
 
 let spheroidSize = 25;
-let tableSize = 400;
+let tableSize = 500;
 
-let theInitVel = 2;
+let theInitVelx = 2;
+let theInitVely = 2;
 
 const theFrameRate = 60; 
 
@@ -39,14 +40,14 @@ const leftCanvasObject = canvas => {
         canvas.rectMode(canvas.CENTER);
         canvas.ellipseMode(canvas.CENTER);
         rectangles[0] = new Rectangle({
-            size: canvas.createVector(400, 400), 
+            size: canvas.createVector(tableSize, tableSize), 
             pos: canvas.createVector((innerWidth - 300) / 4, innerHeight / 2), 
             omega: - omegaValue,
             frame: "room",
             canvas: leftCanvas});
         spheroids[0] = new Spheroid({
             pos: canvas.createVector((innerWidth - 300) / 4, (innerHeight / 4) - 50), 
-            vel: canvas.createVector(theInitVel, theInitVel), 
+            vel: canvas.createVector(theInitVelx, theInitVely), 
             omega: canvas.createVector(0, 0, omegaValue), 
             fill: "red",
             frame: "room",
@@ -73,6 +74,8 @@ const leftCanvasObject = canvas => {
         spheroids[0].display();
 
         canvas.text("Room Frame", canvas.width / 2, 20)
+
+        // console.log(spheroids[1].vel)
     }
   
     canvas.windowResized = function() // inbuilt p5 function. runs everytime the window is resized
@@ -94,14 +97,14 @@ const rightCanvasObject = canvas => {
         canvas.rectMode(canvas.CENTER);
         canvas.ellipseMode(canvas.CENTER);
         rectangles[1] = new Rectangle({
-            size: canvas.createVector(400, 400), 
+            size: canvas.createVector(tableSize, tableSize), 
             pos: canvas.createVector((innerWidth - 300) / 4, innerHeight / 2), 
             omega: 0.0,
             frame: "table",
             canvas: rightCanvas});
         spheroids[1] = new Spheroid({
             pos: canvas.createVector((innerWidth - 300) / 4, (innerHeight / 4) - 50), 
-            vel: canvas.createVector(theInitVel, theInitVel), 
+            vel: canvas.createVector(theInitVelx, theInitVely), 
             omega: canvas.createVector(0, 0, omegaValue), 
             fill: "red",
             frame: "table",
@@ -186,11 +189,14 @@ class Rectangle
             this.canvas.rect(0, 0, tableSize, tableSize);
         this.canvas.pop()
         
+        this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize, spheroidSize);
+
         if (this.frame == "room") 
         {
             this.canvas.push()
                 this.canvas.stroke(0)
                 this.canvas.translate(this.pos)
+                
                 this.canvas.rotate(this.angle);
 
                 spheroids[1].previousPositions.forEach( (position, i) => {
@@ -251,8 +257,12 @@ class Spheroid
     move()
     {
 
-        this.corForce = p5.Vector.mult(p5.Vector.cross(this.omega, this.vel), (2 * this.mass));
-        this.centForce = p5.Vector.mult(p5.Vector.cross(this.omega, this.pos), this.mass).cross(this.omega)
+        // this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
+        // this.centForce = p5.Vector.mult(p5.Vector.cross(this.omega, this.pos), this.mass).cross(this.omega);
+
+        this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
+        this.centForce = p5.Vector.mult(p5.Vector.sub(this.pos, rectangles[0].pos), p5.Vector.dot(this.omega, this.omega) * this.mass);
+
 
         this.acc = p5.Vector.add(this.corForce, this.centForce).div(this.mass);
 
@@ -300,6 +310,7 @@ class Spheroid
         {
             createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.corForce, 10000)), this.corForce.heading(), "blue", 1, this.canvas);
             createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.centForce, 10000)), this.centForce.heading(), "green", 1, this.canvas);
+            createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.vel, 10000)), this.vel.heading(), "red", 1, this.canvas);
 
         }
         
@@ -415,3 +426,12 @@ function createArrow(start, end, angle, color, scale, canvas)
 // check fixed eq with videos
 // apply trajectory to table 
 // differential trajectory relative as seen on/ off the table
+
+
+
+
+// frame rate slider
+// shrink vel arrow
+// host it
+// color code the text
+// make it more user friendly
