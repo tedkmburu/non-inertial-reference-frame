@@ -14,6 +14,7 @@ let sliders = [];
 let play = true;
 
 let omegaValue = 0.005;
+let newOmegaValue = 0.005;
 let roomAngle = 0;
 
 let grid, leftGrid, rightGrid;
@@ -42,7 +43,7 @@ const leftCanvasObject = canvas => {
         rectangles[0] = new Rectangle({
             size: canvas.createVector(tableSize, tableSize), 
             pos: canvas.createVector((innerWidth - 300) / 4, innerHeight / 2), 
-            omega: - omegaValue,
+            omega: -omegaValue,
             frame: "room",
             canvas: leftCanvas});
         spheroids[0] = new Spheroid({
@@ -73,7 +74,14 @@ const leftCanvasObject = canvas => {
         if (play) { spheroids[0].move(); }
         spheroids[0].display();
 
-        canvas.text("Room Frame", canvas.width / 2, 20)
+        canvas.fill(0);
+        canvas.rect(canvas.width - 5, canvas.height / 2, 10, canvas.height)
+
+        canvas.textSize(36)
+        canvas.noStroke()
+        canvas.text("Room Frame", canvas.width / 2, 40)
+        document.getElementById("cent").innerHTML = "<" + spheroids[0].centForce.x.toFixed(3) + ", " + spheroids[0].centForce.y.toFixed(3) + ">";
+        document.getElementById("cor").innerHTML =  "<" + spheroids[0].corForce.x.toFixed(3) + ", " + spheroids[0].corForce.y.toFixed(3) + ">";
 
         // console.log(spheroids[1].vel)
     }
@@ -129,14 +137,19 @@ const rightCanvasObject = canvas => {
 
         if (play) { roomAngle += omegaValue }
 
-        canvas.text("Table Frame", canvas.width / 2, 20)
-        document.getElementById("cent").innerHTML = "<" + spheroids[0].centForce.x.toFixed(3) + ", " + spheroids[0].centForce.y.toFixed(3) + ">";
-        document.getElementById("cor").innerHTML =  "<" + spheroids[0].corForce.x.toFixed(3) + ", " + spheroids[0].corForce.y.toFixed(3) + ">";
+        
 
         if (spheroids[1].pos.x < 0 || spheroids[1].pos.x > innerWidth / 2) 
         {
             togglePlay(false);
         }
+
+
+        canvas.textSize(36)
+        canvas.noStroke()
+        canvas.text("Table Frame", canvas.width / 2, 40)
+        document.getElementById("cent").innerHTML = "<" + spheroids[0].centForce.x.toFixed(3) + ", " + spheroids[0].centForce.y.toFixed(3) + ">";
+        document.getElementById("cor").innerHTML =  "<" + spheroids[0].corForce.x.toFixed(3) + ", " + spheroids[0].corForce.y.toFixed(3) + ">";
     }
   
     canvas.windowResized = function() // inbuilt p5 function. runs everytime the window is resized
@@ -264,10 +277,18 @@ class Spheroid
 
         // this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
         // this.centForce = p5.Vector.mult(p5.Vector.cross(this.omega, this.pos), this.mass).cross(this.omega);
+        if (this.frame == "table") 
+        {
+            this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
+            this.centForce = p5.Vector.mult(p5.Vector.sub(this.pos, rectangles[0].pos), p5.Vector.dot(this.omega, this.omega) * this.mass);
+        }
+        else
+        {
+            this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
+            this.centForce = p5.Vector.mult(p5.Vector.sub(this.pos, rectangles[0].pos), p5.Vector.dot(this.omega, this.omega) * this.mass);
 
-        this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
-        this.centForce = p5.Vector.mult(p5.Vector.sub(this.pos, rectangles[0].pos), p5.Vector.dot(this.omega, this.omega) * this.mass);
-
+        }
+        
 
         this.acc = p5.Vector.add(this.corForce, this.centForce).div(this.mass);
 
@@ -292,23 +313,38 @@ class Spheroid
 
         if (this.frame == "room")
         {
-            let thePoint = p5.Vector.sub(this.pos, rectangles[0].pos)
+            //let thePoint = p5.Vector.sub(this.pos, rectangles[0].pos)
             // this.canvas.ellipse(thePoint.x,  thePoint.y, size, size);
 
-            this.canvas.fill("white");
-            this.canvas.ellipse(rectangles[0].pos.x, rectangles[0].pos.y, spheroidSize, spheroidSize);
+            
 
             // this.canvas.translate(rectangles[0].pos.x, rectangles[0].pos.y)
             let angle = rectangles[0].omega * rightCanvas.frameCount * 1;
             // console.log(angle);
             // this.canvas.rotate(angle)
-            this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize, spheroidSize);
+            this.canvas.push()
+            if (this.frame == "table")
+            {
+                // this.canvas.rotate(rectangles[0].angle)    
+                this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize * this.mass, spheroidSize * this.mass);
+            }
+            else
+            {
+                let lastIndex = spheroids[0].previousPositions.length - 1;
+                this.canvas.ellipse(spheroids[0].previousPositions[lastIndex].x, spheroids[0].previousPositions[lastIndex].y, spheroidSize * this.mass, spheroidSize * this.mass);
+            }
+            
+            this.canvas.pop()
+
+            
+            this.canvas.fill("white");
+            this.canvas.ellipse(rectangles[0].pos.x, rectangles[0].pos.y, spheroidSize, spheroidSize);
 
             
         }
         else
         {
-            this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize, spheroidSize);
+            this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize * this.mass, spheroidSize * this.mass);
         }
         
         
@@ -359,37 +395,40 @@ class Spheroid
 
 function menuInput()
 {
-    spheroids[0].mass = parseInt(document.getElementById("mass").value);
     spheroids[0].startingVel.x = parseInt(document.getElementById("velX").value);
     spheroids[0].startingVel.y = parseInt(document.getElementById("velY").value);
+
+   
+    spheroids[1].startingVel.x = parseInt(document.getElementById("velX").value);
+    spheroids[1].startingVel.y = parseInt(document.getElementById("velY").value);
     // spheroids[0].startingVel.z = parseInt(document.getElementById("velZ").value);
 
-    omegaValue = parseFloat(document.getElementById("omega").value);
+    newOmegaValue = parseFloat(document.getElementById("omega").value);
 
-    let ele = document.getElementsByName('frame');
-    console.log(ele);      
-    
-    for(i = 0; i < ele.length; i++) 
-    {
-        // console.log(ele[i].checked);
-        if(ele[i].checked)
-        {
-            console.log(ele[i].value);
-        }
-    }
-
-    console.log(document.getElementById("frame").value );
+    // console.log(document.getElementById("frame").value );
 }
 
 function resetAll()
 {
+    omegaValue = newOmegaValue;
+
+    rectangles[0].omega = -newOmegaValue
+
+    spheroids[0].mass = parseFloat(document.getElementById("mass").value);
+    spheroids[1].mass = parseFloat(document.getElementById("mass").value);
+    
     spheroids.forEach(sphere => {
         sphere.reset()
     })
 
     rectangles.forEach(rectangle => {
         rectangle.reset()
+        rectangle.omegaValue = newOmegaValue;
     })
+
+    
+
+    
 }
 
 function togglePlay(state)
