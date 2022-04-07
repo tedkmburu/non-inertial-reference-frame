@@ -84,7 +84,8 @@ const leftCanvasObject = canvas => {
 
         canvas.textSize(36)
         canvas.noStroke()
-        canvas.text("Room Frame", canvas.width / 2, 40)
+        canvas.textAlign(canvas.CENTER)
+        canvas.text("Room Frame", canvas.width / 2, innerHeight - 30)
         document.getElementById("cent").innerHTML = "<" + spheroids[0].centForce.x.toFixed(3) + ", " + spheroids[0].centForce.y.toFixed(3) + ">";
         document.getElementById("cor").innerHTML =  "<" + spheroids[0].corForce.x.toFixed(3) + ", " + spheroids[0].corForce.y.toFixed(3) + ">";
 
@@ -159,7 +160,8 @@ const rightCanvasObject = canvas => {
         canvas.textSize(36)
         canvas.fill("black");
         canvas.noStroke()
-        canvas.text("Table Frame", canvas.width / 2, 40)
+        canvas.text("Table Frame", canvas.width / 2, innerHeight - 30)
+        canvas.textAlign(canvas.CENTER)
         document.getElementById("cent").innerHTML = "<" + spheroids[0].centForce.x.toFixed(3) + ", " + spheroids[0].centForce.y.toFixed(3) + ">";
         document.getElementById("cor").innerHTML =  "<" + spheroids[0].corForce.x.toFixed(3) + ", " + spheroids[0].corForce.y.toFixed(3) + ">";
     }
@@ -170,8 +172,8 @@ const rightCanvasObject = canvas => {
     }
 }
 
-new p5(leftCanvasObject); // creates the background instance of p5
-new p5(rightCanvasObject); // creates the foreground instance of p5
+new p5(leftCanvasObject); // creates the left instance of p5
+new p5(rightCanvasObject); // creates the right instance of p5
 
 
 class Rectangle
@@ -231,32 +233,40 @@ class Rectangle
 
                 let theFirst = true;
 
-                spheroids[1].previousPositions.forEach( (position, i) => {
+                try
+                {
+                    spheroids[1].previousPositions.forEach( (position, i) => {
         
-                    this.canvas.push()
-        
-                        this.canvas.fill(theFirst ? "red" : this.fill);
-                        this.canvas.stroke(this.stroke);
+                        this.canvas.push()
+            
+                            this.canvas.fill(theFirst ? "red" : this.fill);
+                            this.canvas.stroke(this.stroke);
+                    
+                            let size = spheroidSize / 10; 
+                            // this.canvas.rotate(((this.angle * -1) - ((i + 1) / 14.5)));
+    
+                            let thePoint = p5.Vector.sub(position, this.pos)
+                            // this.canvas.ellipse(thePoint.x,  thePoint.y, size, size);
+    
+                            if (theFirst) 
+                            {
+                                this.canvas.ellipse(thePoint.x,  thePoint.y, spheroidSize  *  spheroids[0].mass, spheroidSize  * spheroids[0].mass); 
+                            }
+                            else
+                            {
+                                this.canvas.ellipse(thePoint.x,  thePoint.y, size, size); 
+                            }
+    
+                            
+                            theFirst = false;
+                        this.canvas.pop()
+                    })
+                }
+                catch (e)
+                {
+                    location.reload();
+                }
                 
-                        let size = spheroidSize / 10; 
-                        // this.canvas.rotate(((this.angle * -1) - ((i + 1) / 14.5)));
-
-                        let thePoint = p5.Vector.sub(position, this.pos)
-                        // this.canvas.ellipse(thePoint.x,  thePoint.y, size, size);
-
-                        if (theFirst) 
-                        {
-                            this.canvas.ellipse(thePoint.x,  thePoint.y, spheroidSize  *  spheroids[0].mass, spheroidSize  * spheroids[0].mass); 
-                        }
-                        else
-                        {
-                            this.canvas.ellipse(thePoint.x,  thePoint.y, size, size); 
-                        }
-
-                        
-                        theFirst = false;
-                    this.canvas.pop()
-                })
             this.canvas.pop()     
         }
     }
@@ -297,34 +307,23 @@ class Spheroid
 
     move()
     {
+        // calculate the Coriolis and centrifugal forces for a particle
+        this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
+        this.centForce = p5.Vector.mult(p5.Vector.sub(this.pos, rectangles[0].pos), p5.Vector.dot(this.omega, this.omega) * this.mass);
 
-        // this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
-        // this.centForce = p5.Vector.mult(p5.Vector.cross(this.omega, this.pos), this.mass).cross(this.omega);
-        if (this.frame == "table") 
-        {
-            this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
-            this.centForce = p5.Vector.mult(p5.Vector.sub(this.pos, rectangles[0].pos), p5.Vector.dot(this.omega, this.omega) * this.mass);
-        }
-        else
-        {
-            this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
-            this.centForce = p5.Vector.mult(p5.Vector.sub(this.pos, rectangles[0].pos), p5.Vector.dot(this.omega, this.omega) * this.mass);
-
-        }
-        
-
+        // combine the Coriolis and centrifugal forces and divide by mass to get net force
         this.acc = p5.Vector.add(this.corForce, this.centForce).div(this.mass);
 
+        // eulers method with vectors
         this.vel.add(this.acc);
         this.pos.add(this.vel);
 
-
+        // this will add points to the trail of the red ball
         if (this.canvas.frameCount % 15 == 0) 
         {
-            let newPosition = this.canvas.createVector(this.pos.x, this.pos.y)
+            let newPosition = this.pos.copy()
             this.previousPositions.push(newPosition)
         }
-        
     }
 
     display()

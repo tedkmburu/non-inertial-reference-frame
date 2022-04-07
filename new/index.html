@@ -12,37 +12,35 @@
 
         <table class="sliders">
             <tr>
-                <td colspan="2">
+                <td rowspan="2">
                     <input type="button" class="button" value="Play" id="play" onclick="togglePlay()">
                 </td>
-                <td colspan="2">
+                <td rowspan="2">
                     <input type="button" class="button" value="Reset" onclick="resetAll()">
                 </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="mass">Mass: </label>
+                <td class="small">
+                    <img src="ref (3).png" class="small">:
                 </td>
                 <td>
                     <input type="range" id="mass" value="" min="1" max="4" step="0.1" class="range" oninput="menuInput()">
                 </td>
-                <td>
-                    <label for="velX">initial Vel x: </label>
-                </td>
-                <td>
-                    <input type="range" id="velX" value="" min="0" max="10" step="1" class="range" oninput="menuInput()">
-                </td>
-            </tr>
-            <tr> 
-                <td>
-                    <label for="velZ">omega: </label>
+                <td class="small">
+                    <img src="ref (6).png" class="small">:
                 </td>
                 <td>
                     <input type="range" id="omega" value="" min="0" max="0.01" step="0.001" class="range" oninput="menuInput()">
                 </td>
-                
+            </tr>
+            <tr>
+                <td class="small">
+                    <img src="ref (4).png" class="small">
+                </td>
                 <td>
-                    <label for="velY">initial Vel y: </label>
+                    <input type="range" id="velX" value="" min="0" max="10" step="1" class="range" oninput="menuInput()">
+                </td>               
+                
+                <td class="small">
+                    <img src="ref (7).png" class="small">
                 </td>
                 <td>
                     <input type="range" id="velY" value="" min="0" max="10" step="1" class="range" oninput="menuInput()">
@@ -52,21 +50,11 @@
 
         <table class="words">
             <tr>
-                <td> F </td>
-                <td> = </td>
-                <td> F_0 </td>
-                <td> + </td>
-                <td class="cor"> F_cor </td>
-                <td> + </td>
-                <td class="cf"> F_cf </td>
-            </tr>
-            <tr>
-                <td> F </td>
-                <td> = </td>
-                <td> 0 </td>
-                <td> + </td>
+                <td class="big"> <img src="equation.png" class="equation" ></td>
+
+                <td> <img src="ref (1).png" class="medium"> </td>
                 <td class="cor"> <output id="cor">0</output> </td>
-                <td> + </td>
+                <td><img src="ref (2).png" class="medium"></td>
                 <td class="cf"> <output id="cent">0</output> </td>
             </tr>
         </table>
