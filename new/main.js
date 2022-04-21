@@ -1,4 +1,5 @@
 let leftCanvas, rightCanvas; 
+let fCorImg, fCfImg, vImg;
 
 let boxes = [];
 
@@ -21,7 +22,7 @@ let grid, leftGrid, rightGrid;
 let room;
 
 let spheroidSize = 25;
-let tableSize = 550;
+let tableSize = innerWidth / 3.490905;
 
 let theInitVelx = 3;
 let theInitVely = 1;
@@ -44,13 +45,13 @@ const leftCanvasObject = canvas => {
         canvas.ellipseMode(canvas.CENTER);
         rectangles[0] = new Rectangle({
             size: canvas.createVector(tableSize, tableSize), 
-            pos: canvas.createVector((innerWidth - 300) / 4, innerHeight / 2), 
+            pos: canvas.createVector((innerWidth) / 4, innerHeight / 2), 
             omega: -omegaValue,
             frame: "room",
             canvas: leftCanvas});
 
         spheroids[0] = new Spheroid({
-            pos: canvas.createVector((innerWidth - 300) / 5, (innerHeight / 4) - 50), 
+            pos: canvas.createVector((innerWidth) / 4, (innerHeight / 4) - 50), 
             vel: canvas.createVector(theInitVelx, theInitVely), 
             omega: canvas.createVector(0, 0, omegaValue), 
             fill: "red",
@@ -64,7 +65,7 @@ const leftCanvasObject = canvas => {
             spheroids[0].reset()
     }
   
-    canvas.draw = function() // this function runs every frame. Everything on the background canvas starts here.
+    canvas.draw = function() // this function runs every frame. Everything on the left canvas starts here.
     {  
         canvas.background(100); // sets the background color to grey
         canvas.frameRate(theFrameRate);  // the simulation will try limit itself to 60 frames per second. If a device can't maintain 60 fps, it will run at whatever it can
@@ -86,21 +87,30 @@ const leftCanvasObject = canvas => {
         canvas.noStroke()
         canvas.textAlign(canvas.CENTER)
         canvas.text("Room Frame", canvas.width / 2, innerHeight - 30)
-        document.getElementById("cent").innerHTML = "<" + spheroids[0].centForce.x.toFixed(3) + ", " + spheroids[0].centForce.y.toFixed(3) + ">";
-        document.getElementById("cor").innerHTML =  "<" + spheroids[0].corForce.x.toFixed(3) + ", " + spheroids[0].corForce.y.toFixed(3) + ">";
 
-        // console.log(spheroids[1].vel)
+        let forceScale = 100;
+        let centForceText = "<" + spheroids[0].centForce.copy().mult(forceScale).x.toFixed(2) + ", " + spheroids[0].centForce.copy().mult(forceScale).y.toFixed(2) + ">";
+        let corForceText = "<" + spheroids[0].corForce.copy().mult(forceScale).x.toFixed(2) + ", " + spheroids[0].corForce.copy().mult(forceScale).y.toFixed(2) + ">";
+        document.getElementById("cent").innerHTML = centForceText;
+        document.getElementById("cor").innerHTML =  corForceText;
     }
   
     canvas.windowResized = function() // inbuilt p5 function. runs everytime the window is resized
     {
-      canvas.resizeCanvas((innerWidth - 300) / 2, innerHeight); // resizes the canvas to fit the new window size
+        canvas.resizeCanvas(innerWidth / 2, innerHeight); // resizes the canvas to fit the new window size
+        canvas.setup()
     }
 }
 
 
 const rightCanvasObject = canvas => {
-    canvas.preload = function() { rightGrid = canvas.loadImage('grid2.png'); }
+    canvas.preload = function() 
+    { 
+        rightGrid = canvas.loadImage('grid2.png'); 
+        fCorImg = canvas.loadImage('ref (1).png'); 
+        fCfImg = canvas.loadImage('ref (2).png'); 
+        vImg = canvas.loadImage('v.png'); 
+    }
     canvas.setup = function()  // This function only runs once when the page first loads. 
     {
         let cnv = canvas.createCanvas(innerWidth / 2, innerHeight); // creates the <canvas> that everything runs on.
@@ -112,12 +122,12 @@ const rightCanvasObject = canvas => {
         canvas.ellipseMode(canvas.CENTER);
         rectangles[1] = new Rectangle({
             size: canvas.createVector(tableSize, tableSize), 
-            pos: canvas.createVector((innerWidth - 300) / 4, innerHeight / 2), 
+            pos: canvas.createVector((innerWidth) / 4, innerHeight / 2), 
             omega: 0.0,
             frame: "table",
             canvas: rightCanvas});
         spheroids[1] = new Spheroid({
-            pos: canvas.createVector((innerWidth - 300) / 5, (innerHeight / 4) - 50), 
+            pos: canvas.createVector((innerWidth) / 4, (innerHeight / 4) - 50), 
             vel: canvas.createVector(theInitVelx, theInitVely), 
             omega: canvas.createVector(0, 0, omegaValue), 
             fill: "red",
@@ -127,7 +137,7 @@ const rightCanvasObject = canvas => {
         spheroids[1].reset()
     }
   
-    canvas.draw = function() // this function runs every frame. Everything on the background canvas starts here.
+    canvas.draw = function() // this function runs every frame. Everything on the right canvas starts here.
     {  
         canvas.background(175); // sets the background color to grey
         canvas.frameRate(theFrameRate);  // the simulation will try limit itself to 60 frames per second. If a device can't maintain 60 fps, it will run at whatever it can
@@ -137,10 +147,6 @@ const rightCanvasObject = canvas => {
             canvas.image(rightGrid,-innerWidth, -innerHeight, backgroundSize, backgroundSize)
         canvas.pop();
 
-        canvas.fill("white");
-        canvas.stroke(0)
-        canvas.ellipse(rectangles[0].pos.x, rectangles[0].pos.y, spheroidSize, spheroidSize);
-
         if (play) { rectangles[1].move(); }
         rectangles[1].display();
 
@@ -149,26 +155,22 @@ const rightCanvasObject = canvas => {
 
         if (play) { roomAngle += omegaValue }
 
-        
-
         if (spheroids[1].pos.x < 0 || spheroids[1].pos.x > innerWidth / 2) 
         {
             togglePlay(false);
         }
 
-        
         canvas.textSize(36)
         canvas.fill("black");
         canvas.noStroke()
         canvas.text("Table Frame", canvas.width / 2, innerHeight - 30)
         canvas.textAlign(canvas.CENTER)
-        document.getElementById("cent").innerHTML = "<" + spheroids[0].centForce.x.toFixed(3) + ", " + spheroids[0].centForce.y.toFixed(3) + ">";
-        document.getElementById("cor").innerHTML =  "<" + spheroids[0].corForce.x.toFixed(3) + ", " + spheroids[0].corForce.y.toFixed(3) + ">";
     }
   
     canvas.windowResized = function() // inbuilt p5 function. runs everytime the window is resized
     {
-      canvas.resizeCanvas((innerWidth - 300) / 2, innerHeight); // resizes the canvas to fit the new window size
+        canvas.resizeCanvas(innerWidth / 2, innerHeight); // resizes the canvas to fit the new window size
+        canvas.setup()
     }
 }
 
@@ -213,6 +215,9 @@ class Rectangle
 
     display()
     {
+        this.canvas.fill("white");
+        this.canvas.stroke(0)
+
         this.canvas.push()
             this.canvas.translate(this.pos);
             this.canvas.rotate(this.angle);
@@ -235,20 +240,18 @@ class Rectangle
 
                 try
                 {
-                    spheroids[1].previousPositions.forEach( (position, i) => {
+                    spheroids[0].previousPositions.forEach( (position, i) => {
         
                         this.canvas.push()
             
-                            this.canvas.fill(theFirst ? "red" : this.fill);
+                            this.canvas.fill(i == 0 ? "red" : this.fill);
                             this.canvas.stroke(this.stroke);
                     
                             let size = spheroidSize / 10; 
-                            // this.canvas.rotate(((this.angle * -1) - ((i + 1) / 14.5)));
     
                             let thePoint = p5.Vector.sub(position, this.pos)
-                            // this.canvas.ellipse(thePoint.x,  thePoint.y, size, size);
     
-                            if (theFirst) 
+                            if (i == 0) 
                             {
                                 this.canvas.ellipse(thePoint.x,  thePoint.y, spheroidSize  *  spheroids[0].mass, spheroidSize  * spheroids[0].mass); 
                             }
@@ -257,8 +260,7 @@ class Rectangle
                                 this.canvas.ellipse(thePoint.x,  thePoint.y, size, size); 
                             }
     
-                            
-                            theFirst = false;
+                        
                         this.canvas.pop()
                     })
                 }
@@ -287,7 +289,8 @@ class Spheroid
 
         this.startingPos = props.pos || this.canvas.createVector(0, 0); 
         this.startingVel = props.vel || this.canvas.createVector(0, 0); 
-        this.startingAcc = props.acc || this.canvas.createVector(0, 0); 
+        this.vel = props.vel || this.canvas.createVector(0, 0); 
+        this.acc = props.acc || this.canvas.createVector(0, 0); 
 
         this.reset();
         this.angle = props.angle || this.canvas.createVector(0, 0)
@@ -341,14 +344,14 @@ class Spheroid
             
 
             // this.canvas.translate(rectangles[0].pos.x, rectangles[0].pos.y)
-            let angle = rectangles[0].omega * rightCanvas.frameCount * 1;
+            // let angle = rectangles[0].omega * rightCanvas.frameCount * 1;
             // console.log(angle);
             // this.canvas.rotate(angle)
             this.canvas.push()
             if (this.frame == "table")
             {
                 // this.canvas.rotate(rectangles[0].angle)    
-                this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize * this.mass, spheroidSize * this.mass);
+                // this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize * this.mass, spheroidSize * this.mass);
             }
             else
             {
@@ -358,11 +361,6 @@ class Spheroid
             }
             
             this.canvas.pop()
-
-            
-            this.canvas.fill("white");
-            this.canvas.ellipse(rectangles[0].pos.x, rectangles[0].pos.y, spheroidSize, spheroidSize);
-
             
         }
         else
@@ -374,9 +372,23 @@ class Spheroid
 
         if (this.frame == "table") 
         {
-            createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.corForce, 10000)), this.corForce.heading(), "blue", 1, this.canvas);
-            createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.centForce, 10000)), this.centForce.heading(), "green", 1, this.canvas);
-            createArrow(this.pos, p5.Vector.add(this.pos, p5.Vector.mult(this.vel, 100)), this.vel.heading(), "red", 1, this.canvas);
+            let fCorFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.corForce, 10000));
+            let fCentFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.centForce, 10000));
+            let velFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.vel, 100));
+            
+            createArrow(this.pos, fCorFinalPosition, this.corForce.heading(), "blue", 1, this.canvas);
+            createArrow(this.pos, fCentFinalPosition, this.centForce.heading(), "green", 1, this.canvas);
+            createArrow(this.pos, velFinalPosition, this.vel.heading(), "red", 1, this.canvas);
+
+            let scaleCor = 30;
+            let scaleCf = 30;
+            let scaleV = 1.5;
+
+            this.canvas.image(fCorImg,fCorFinalPosition.x, fCorFinalPosition.y, 2000/scaleCor, 1320/scaleCor)
+            this.canvas.image(fCfImg,fCentFinalPosition.x, fCentFinalPosition.y, 1656/scaleCf, 1464/scaleCf)
+            this.canvas.image(vImg,velFinalPosition.x, velFinalPosition.y, 46/scaleV, 61/scaleV)
+            
+            
 
         }
         
@@ -408,7 +420,7 @@ class Spheroid
         roomAngle = 0;
         this.pos = this.startingPos.copy(); 
         this.vel = this.startingVel.copy(); 
-        this.pos = this.startingPos.copy(); 
+        // this.pos = this.startingPos.copy(); 
 
         this.omega = this.canvas.createVector(0, 0, omegaValue)
 
@@ -426,19 +438,32 @@ function menuInput()
     spheroids[1].startingVel.y = parseInt(document.getElementById("velY").value);
     // spheroids[0].startingVel.z = parseInt(document.getElementById("velZ").value);
 
-    newOmegaValue = parseFloat(document.getElementById("omega").value);
+    omegaValue = parseFloat(document.getElementById("omega").value);
+
+    rectangles.forEach(rectangle => {
+        rectangle.omegaValue = omegaValue;
+    })
+
+    spheroids.forEach(spheroid => {
+        spheroid.omega = canvas.createVector(0, 0, omegaValue);
+    })
+
+    
+
+    spheroids[0].mass = parseFloat(document.getElementById("mass").value);
+    spheroids[1].mass = parseFloat(document.getElementById("mass").value);
 
     // console.log(document.getElementById("frame").value );
 }
 
 function resetAll()
 {
-    omegaValue = newOmegaValue;
+    // omegaValue = newOmegaValue;
 
     rectangles[0].omega = -newOmegaValue
 
-    spheroids[0].mass = parseFloat(document.getElementById("mass").value);
-    spheroids[1].mass = parseFloat(document.getElementById("mass").value);
+    // spheroids[0].mass = parseFloat(document.getElementById("mass").value);
+    // spheroids[1].mass = parseFloat(document.getElementById("mass").value);
     
     spheroids.forEach(sphere => {
         sphere.reset()
@@ -446,7 +471,7 @@ function resetAll()
 
     rectangles.forEach(rectangle => {
         rectangle.reset()
-        rectangle.omegaValue = newOmegaValue;
+        // rectangle.omega = newOmegaValue;
     })
 
     

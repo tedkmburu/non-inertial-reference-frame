@@ -54,7 +54,7 @@ table.words
 {
     font-size: 16pt;
     text-align: center;
-    width: 55%;
+    width: 59%;
     float: left;
 }
 
@@ -63,7 +63,7 @@ table.sliders
     width: 40%;
     text-align: right;
     float: left;
-    margin-top: 5px;
+    margin-top: px;
 }
 
 input.button
@@ -80,7 +80,7 @@ table.words td
 
 td.cor
 {
-    color: red;
+    color: blue;
 }
 
 td.cf
@@ -91,6 +91,11 @@ td.cf
 td
 {
     /* border: 1px solid black; */
+}
+
+td.range
+{
+    /* width: ; */
 }
 
 input.range
@@ -108,16 +113,16 @@ img.equation
 }
 img.small
 {
-    width: 80%;
+    width: 100%;
 }
 img.medium
 {
-    width: 50px;
+    width: 35px;
     float: right;
 }
 td.small
 {
-    width: 75px;
+    width: 50px;
 }
 td.big
 {
