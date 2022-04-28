@@ -57,13 +57,18 @@ table.words
     width: 59%;
     float: left;
 }
-
+img.topLeftButton
+{
+    height: 40px;
+    width: 40px;
+    margin-top: 10px;
+}
 table.sliders
 {
     width: 40%;
     text-align: right;
     float: left;
-    margin-top: px;
+    margin-top: 10px;
 }
 
 input.button
