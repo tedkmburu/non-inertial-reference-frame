@@ -29,15 +29,22 @@ class Spheroid
 
     move()
     {
-        if (this.frame == "table") 
+        
+        let netAcc = this.canvas.createVector(0,0)
+        for (let i = 0; i < 100; i++) 
         {
-            // calculate the Coriolis and centrifugal forces for a particle
-            this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
-            let rho = p5.Vector.sub(this.pos, rectangles[0].pos)
-            this.centForce = p5.Vector.mult(rho, p5.Vector.dot(this.omega, this.omega) * this.mass);
+            if (this.frame == "table") 
+            {
+                // calculate the Coriolis and centrifugal forces for a particle
+                this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
+                let rho = p5.Vector.sub(this.pos, rectangles[0].pos);
+                this.centForce = p5.Vector.mult(rho, p5.Vector.dot(this.omega, this.omega) * this.mass);
 
-            // combine the Coriolis and centrifugal forces and divide by mass to get net force
-            this.acc = p5.Vector.add(this.corForce, this.centForce).div(this.mass);
+                // combine the Coriolis and centrifugal forces and divide by mass to get net force
+                this.acc = p5.Vector.add(this.corForce, this.centForce).div(this.mass);
+
+                netAcc.add(this.acc)
+            }            
         }
 
         // this will add points to the trail of the red ball
@@ -46,12 +53,10 @@ class Spheroid
             let newPosition = this.pos.copy()
             this.previousPositions.push(newPosition)
         }
+
         // eulers method with vectors
-        this.vel.add(this.acc);
+        this.vel.add(netAcc.div(100));
         this.pos.add(this.vel);
-
-        
-
     }
 
     display()
@@ -62,13 +67,11 @@ class Spheroid
         this.canvas.stroke(this.stroke);
 
         // this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize * this.mass, spheroidSize * this.mass);
+        this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize * this.mass, spheroidSize * this.mass);
+        this.displayForceVectors()
 
-        // if (this.frame == "table")
-        // {
-            this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize * this.mass, spheroidSize * this.mass);
-
-            this.displayForceVectors()
-
+        if (this.frame == "table")
+        {
             this.previousPositions.forEach( position => {
 
                 this.canvas.push()
@@ -81,7 +84,23 @@ class Spheroid
 
                 this.canvas.pop()
             })
-        // }
+        }
+        else
+        {
+            this.previousPositions.forEach( position => {
+                this.canvas.push()
+                    
+                    // this.canvas.rotate(rectangles[0].angle)
+                    this.canvas.translate(position.x, position.y)
+                    this.canvas.fill(this.fill);
+                    this.canvas.stroke(this.stroke);
+            
+                    let size = spheroidSize / 10; 
+                    this.canvas.ellipse(0, 0, size, size);
+
+                this.canvas.pop()
+            })
+        }
 
         this.canvas.pop()
     }

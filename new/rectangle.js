@@ -40,10 +40,61 @@ class Rectangle
             this.canvas.fill(this.fill);
             this.canvas.stroke(this.stroke)
             this.canvas.rect(0, 0, tableSize, tableSize);
+
+            // if (this.frame == "room")
+            // {
+            //     let point = spheroids[0].previousPositions[0]
+            //     // console.log(point);
+            //             this.canvas.fill("green");
+            //             this.canvas.stroke(this.stroke);
+            //     let size = spheroidSize / 2; 
+            //     this.canvas.ellipse(point.x, point.y, size, size);
+                
+            //     // spheroids[0].previousPositions.forEach( position => {
+            //     //     // this.canvas.push()
+            //     //     //     this.canvas.translate(position.x, position.y)
+            //     //     //     this.canvas.rotate(this.angle)
+            //     //         this.canvas.translate(this.pos.copy().mult(-1));
+            //     //         this.canvas.fill(this.fill);
+            //     //         this.canvas.stroke(this.stroke);
+                
+            //     //         let size = spheroidSize / 2; 
+            //     //         this.canvas.ellipse(position.x, position.y, size, size);
+
+            //     //     // this.canvas.pop()
+            //     // })    
+            // }
+
         this.canvas.pop()
         
         this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize, spheroidSize);
 
+        // if (this.frame == "room")
+        //     {
+        //         this.canvas.push()
+        //         // this.canvas.rotate(this.angle, this.pos);
+        //         let point = spheroids[0].previousPositions[0].copy().rotate(this.angle * -0.5)
+        //         // console.log(point);
+        //                 this.canvas.fill("green");
+        //                 this.canvas.stroke(this.stroke);
+        //         let size = spheroidSize / 2; 
+        //         this.canvas.ellipse(point.x, point.y, size, size);
+        //         this.canvas.pop()
+                
+        //         // spheroids[0].previousPositions.forEach( position => {
+        //         //     // this.canvas.push()
+        //         //     //     this.canvas.translate(position.x, position.y)
+        //         //     //     this.canvas.rotate(this.angle)
+        //         //         this.canvas.translate(this.pos.copy().mult(-1));
+        //         //         this.canvas.fill(this.fill);
+        //         //         this.canvas.stroke(this.stroke);
+                
+        //         //         let size = spheroidSize / 2; 
+        //         //         this.canvas.ellipse(position.x, position.y, size, size);
+
+        //         //     // this.canvas.pop()
+        //         // })    
+        //     }
         // if (this.frame == "room") 
         // {
         //     this.canvas.push()

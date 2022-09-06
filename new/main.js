@@ -49,7 +49,7 @@ function menuInput()
     })
 
     spheroids.forEach(spheroid => {
-        spheroid.omega = canvas.createVector(0, 0, omegaValue);
+        spheroid.omega = p5.Vector.createVector(0, 0, omegaValue);
     })
 
     spheroids[0].mass = parseFloat(document.getElementById("mass").value);
