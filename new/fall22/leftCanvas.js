@@ -6,30 +6,25 @@ const leftCanvasObject = canvas => {
         let cnv = canvas.createCanvas(innerWidth / 2, innerHeight);
         cnv.addClass('left');
         leftCanvas = canvas;
+
         canvas.angleMode(canvas.RADIANS);
-    
         canvas.rectMode(canvas.CENTER);
         canvas.ellipseMode(canvas.CENTER);
+
         rectangles[0] = new Rectangle({
             size: canvas.createVector(tableSize, tableSize), 
             pos: canvas.createVector((innerWidth) / 4, innerHeight / 2), 
-            omega: -omegaValue,
             frame: "room",
-            canvas: leftCanvas});
+            omega: omegaValue,
+            canvas: leftCanvas
+        });
 
         spheroids[0] = new Spheroid({
             pos: canvas.createVector((innerWidth) / 4, (innerHeight / 4) - 50), 
-            vel: canvas.createVector(theInitVelx, theInitVely), 
-            omega: canvas.createVector(0, 0, omegaValue), 
+            vel: canvas.createVector(theInitVelx, theInitVely),  
             fill: "red",
             frame: "room",
             canvas: leftCanvas});
-
-            document.getElementById("mass").value = spheroids[0].mass;
-            document.getElementById("velX").value = spheroids[0].vel.x;
-            document.getElementById("velY").value = spheroids[0].vel.y;
-
-            spheroids[0].reset()
     }
   
     canvas.draw = function() // this function runs every frame. Everything on the left canvas starts here.
@@ -42,25 +37,20 @@ const leftCanvasObject = canvas => {
             canvas.image(leftGrid,-smallerSide, -smallerSide, smallerSide * 2, smallerSide * 2)
         canvas.pop();
 
-        if (play) { rectangles[0].move(); }
-        rectangles[0].display();
-
-        if (play) { spheroids[0].move(); }
-        spheroids[0].display();
-
         canvas.fill(0);
         canvas.rect(canvas.width - 5, canvas.height / 2, 10, canvas.height)
+
+        if (playState) { rectangles[0].move(); }
+        rectangles[0].display();
+
+        if (playState) { spheroids[0].move(); }
+        spheroids[0].display();
 
         canvas.textSize(36)
         canvas.noStroke()
         canvas.textAlign(canvas.CENTER)
+        canvas.fill(0)
         canvas.text("Room Frame", canvas.width / 2, innerHeight - 30)
-
-        // let forceScale = 100;
-        // let centForceText = "<" + spheroids[0].centForce.copy().mult(forceScale).x.toFixed(2) + ", " + spheroids[0].centForce.copy().mult(forceScale).y.toFixed(2) + ">";
-        // let corForceText = "<" + spheroids[0].corForce.copy().mult(forceScale).x.toFixed(2) + ", " + spheroids[0].corForce.copy().mult(forceScale).y.toFixed(2) + ">";
-        // document.getElementById("cent").innerHTML = centForceText;
-        // document.getElementById("cor").innerHTML =  corForceText;
     }
   
     canvas.windowResized = function() // inbuilt p5 function. runs everytime the window is resized
@@ -69,5 +59,5 @@ const leftCanvasObject = canvas => {
         canvas.setup()
     }
 
-    canvas.mouseDragged = function() { mouseDraggedLeft(canvas); }
+    // canvas.mouseDragged = function() { mouseDraggedLeft(canvas); }
 }

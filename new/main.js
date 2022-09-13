@@ -24,8 +24,8 @@ let room;
 let spheroidSize = 25;
 let tableSize = innerWidth / 3;
 
-let theInitVelx = 0;
-let theInitVely = 3;
+let theInitVelx = 2;
+let theInitVely = 2;
 
 let backgroundSize = innerWidth * 2;
 
