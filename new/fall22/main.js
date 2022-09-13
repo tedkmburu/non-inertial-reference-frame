@@ -1,4 +1,4 @@
-const theFrameRate = 5; 
+const theFrameRate = 30; 
 
 let playState = true;
 

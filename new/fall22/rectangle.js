@@ -52,11 +52,12 @@ class Rectangle
 
         this.canvas.push();
             this.canvas.translate(this.pos);
+            this.canvas.rotate(this.angle);
             this.canvas.stroke(this.stroke);
         
             this.canvas.fill(0);
             this.previousPositions.forEach(position => {
-                this.canvas.rotate(this.angle);
+                
                 this.canvas.ellipse(position.x, position.y, 10, 10);
             });
         this.canvas.pop();
