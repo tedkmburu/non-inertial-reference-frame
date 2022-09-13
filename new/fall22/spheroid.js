@@ -47,6 +47,8 @@ class Spheroid
         {
             let newPosition = this.pos.copy()
             this.previousPositions.push(newPosition)
+            let rectPosition = newPosition.copy().sub(rectangles[0].pos)
+            rectangles[0].previousPositions.push(rectPosition)
         }
 
         // eulers method with vectors
@@ -84,7 +86,7 @@ class Spheroid
 
     reset()
     {
-        roomAngle = 0;
+        // roomAngle = 0;
         this.pos = this.startingPos.copy(); 
         this.vel = this.startingVel.copy(); 
 
@@ -107,8 +109,8 @@ class Spheroid
         let scaleCf = 30;
         let scaleV = 1.5;
 
-        if (this.corForce.mag() > 0) this.canvas.image(fCorImg,fCorFinalPosition.x, fCorFinalPosition.y, 2000/scaleCor, 1320/scaleCor)
-        if (this.centForce.mag() > 0) this.canvas.image(fCfImg,fCentFinalPosition.x, fCentFinalPosition.y, 1656/scaleCf, 1464/scaleCf)
-        if (this.vel.mag() > 0) this.canvas.image(vImg,velFinalPosition.x, velFinalPosition.y, 46/scaleV, 61/scaleV)
+        // if (this.corForce.mag() > 0) this.canvas.image(fCorImg,fCorFinalPosition.x, fCorFinalPosition.y, 2000/scaleCor, 1320/scaleCor)
+        // if (this.centForce.mag() > 0) this.canvas.image(fCfImg,fCentFinalPosition.x, fCentFinalPosition.y, 1656/scaleCf, 1464/scaleCf)
+        // if (this.vel.mag() > 0) this.canvas.image(vImg,velFinalPosition.x, velFinalPosition.y, 46/scaleV, 61/scaleV)
     }
 }

@@ -18,10 +18,11 @@ class Rectangle
         // this.previousPositions.push(p5.Vector.sub(this.pos, this.canvas.createVector(0, -10)))
         // this.previousPositions.push(p5.Vector.sub(this.pos, this.canvas.createVector(10, 0)))
 
-        this.previousPositions = [this.canvas.createVector(0, 10)]
-        this.previousPositions.push(this.canvas.createVector(-10, 0))
-        this.previousPositions.push(this.canvas.createVector(0, -10))
-        this.previousPositions.push(this.canvas.createVector(10, 0))
+        this.previousPositions = []
+        // this.previousPositions = [this.canvas.createVector(0, 10)]
+        // this.previousPositions.push(this.canvas.createVector(-10, 0))
+        // this.previousPositions.push(this.canvas.createVector(0, -10))
+        // this.previousPositions.push(this.canvas.createVector(10, 0))
 
 
         this.frame = props.frame; 
@@ -47,9 +48,15 @@ class Rectangle
             this.canvas.fill(this.fill);
             this.canvas.stroke(this.stroke);
             this.canvas.rect(0, 0, tableSize, tableSize);
+        this.canvas.pop();
+
+        this.canvas.push();
+            this.canvas.translate(this.pos);
+            this.canvas.stroke(this.stroke);
         
             this.canvas.fill(0);
             this.previousPositions.forEach(position => {
+                this.canvas.rotate(this.angle);
                 this.canvas.ellipse(position.x, position.y, 10, 10);
             });
         this.canvas.pop();
