@@ -1,9 +1,9 @@
-const theFrameRate = 30; 
+const theFrameRate = 60; 
 
 let playState = true;
 
 let spheroidSize = 25;
-let tableSize = innerWidth / 3;
+let tableSize = innerWidth / 1.5;
 
 let rectangles = []
 let spheroids = []

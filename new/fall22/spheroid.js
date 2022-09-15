@@ -19,7 +19,7 @@ class Spheroid
         this.corForce = props.corForce || this.canvas.createVector(0, 0);
         this.centForce = props.centForce || this.canvas.createVector(0, 0);
 
-        this.previousPositions = [props.pos]
+        this.previousPositions = []
 
         this.stroke = props.stroke || "black";
         this.fill = props.fill || "white";
@@ -46,8 +46,9 @@ class Spheroid
         if (this.canvas.frameCount % 15 == 0) 
         {
             let newPosition = this.pos.copy()
-            this.previousPositions.push(newPosition)
-            let rectPosition = newPosition.copy().sub(rectangles[0].pos).rotate(-0.06 * (this.previousPositions.length))
+            this.previousPositions.push(newPosition.copy())
+            // let rectPosition = newPosition.copy().sub(rectangles[0].pos).rotate(-0.05 * (this.previousPositions.length))
+            let rectPosition = newPosition.copy().sub(rectangles[0].pos.copy()).rotate(-rectangles[0].angle) // problem here
             rectangles[0].previousPositions.push(rectPosition)
         }
 
