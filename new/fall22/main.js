@@ -3,7 +3,7 @@ const theFrameRate = 60;
 let playState = true;
 
 let spheroidSize = 25;
-let tableSize = innerWidth / 1.5;
+let tableSize = innerWidth / 3;
 
 let rectangles = []
 let spheroids = []
@@ -14,6 +14,7 @@ let theInitVelx = 2;
 let theInitVely = 2;
 
 new p5(leftCanvasObject); // creates the left instance of p5
+new p5(rightCanvasObject); // creates the right instance of p5
 
 
 function createArrow(start, end, angle, color, scale, canvas)

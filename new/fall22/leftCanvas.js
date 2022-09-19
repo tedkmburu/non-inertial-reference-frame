@@ -2,8 +2,7 @@ const leftCanvasObject = canvas => {
     canvas.preload = function() { leftGrid = canvas.loadImage('images/grid2.png'); }
     canvas.setup = function()  // This function only runs once when the page first loads. 
     {
-        // canvas.createCanvas(innerWidth, innerHeight); // creates the <canvas> that everything runs on.
-        let cnv = canvas.createCanvas(innerWidth, innerHeight);
+        let cnv = canvas.createCanvas(innerWidth / 2, innerHeight);
         cnv.addClass('left');
         leftCanvas = canvas;
 
@@ -13,14 +12,14 @@ const leftCanvasObject = canvas => {
 
         rectangles[0] = new Rectangle({
             size: canvas.createVector(tableSize, tableSize), 
-            pos: canvas.createVector((innerWidth) / 2, innerHeight / 2), 
+            pos: canvas.createVector((innerWidth) / 4, innerHeight / 2), 
             frame: "room",
             omega: omegaValue,
             canvas: leftCanvas
         });
 
         spheroids[0] = new Spheroid({
-            pos: canvas.createVector((innerWidth) / 2, (innerHeight / 4) - 50), 
+            pos: canvas.createVector((innerWidth) / 4, (innerHeight / 4) - 50), 
             vel: canvas.createVector(theInitVelx, theInitVely),  
             fill: "red",
             frame: "room",
@@ -40,8 +39,11 @@ const leftCanvasObject = canvas => {
         canvas.fill(0);
         canvas.rect(canvas.width - 5, canvas.height / 2, 10, canvas.height)
 
-        if (playState) { spheroids[0].move(); }
-        if (playState) { rectangles[0].move(); }
+        if (playState) 
+        { 
+            spheroids[0].move(); 
+            rectangles[0].move();
+        }
         rectangles[0].display();
         spheroids[0].display();
 

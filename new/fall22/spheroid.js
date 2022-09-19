@@ -47,8 +47,7 @@ class Spheroid
         {
             let newPosition = this.pos.copy()
             this.previousPositions.push(newPosition.copy())
-            // let rectPosition = newPosition.copy().sub(rectangles[0].pos).rotate(-0.05 * (this.previousPositions.length))
-            let rectPosition = newPosition.copy().sub(rectangles[0].pos.copy()).rotate(-rectangles[0].angle) // problem here
+            let rectPosition = newPosition.copy().sub(rectangles[0].pos.copy()).rotate(-rectangles[0].angle)
             rectangles[0].previousPositions.push(rectPosition)
         }
 
