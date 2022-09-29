@@ -49,17 +49,17 @@ const rightCanvasObject = canvas => {
         // console.log(rectangles[0].angle);
         if (playState) 
         { 
-            rectangles[1].move(); 
             spheroids[1].move(); 
-            roomAngle += omegaValue
+            rectangles[1].move(); 
+            // roomAngle += omegaValue
         }
         rectangles[1].display();
         spheroids[1].display();
 
-        if (spheroids[1].pos.x < 0 || spheroids[1].pos.x > innerWidth / 2) 
-        {
-            togglePlay(false);
-        }
+        // if (spheroids[1].pos.x < 0 || spheroids[1].pos.x > innerWidth / 2) 
+        // {
+        //     togglePlay(false);
+        // }
 
         canvas.textSize(36)
         canvas.fill("black");

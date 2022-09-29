@@ -52,8 +52,18 @@ class Spheroid
         }
 
         // eulers method with vectors
-        this.vel.add(netAcc.div(100));
-        this.pos.add(this.vel);
+
+        if(playForward)
+        {
+            this.vel.add(netAcc.div(100));
+            this.pos.add(this.vel);
+        }
+        else
+        {
+            this.vel.sub(netAcc.div(100));
+            this.pos.sub(this.vel);
+        }
+        
     }
 
     display()
@@ -67,19 +77,7 @@ class Spheroid
         this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize * this.mass, spheroidSize * this.mass);
         this.displayForceVectors()
 
-        this.previousPositions.forEach( position => {
-            this.canvas.push()
-                
-                // this.canvas.rotate(rectangles[0].angle)
-                this.canvas.translate(position.x, position.y)
-                this.canvas.fill(this.fill);
-                this.canvas.stroke(this.stroke);
-        
-                let size = spheroidSize / 10; 
-                this.canvas.ellipse(0, 0, size, size);
-
-            this.canvas.pop()
-        })
+        this.displayTrails()
 
         this.canvas.pop()
     }
@@ -88,7 +86,8 @@ class Spheroid
     {
         // roomAngle = 0;
         this.pos = this.startingPos.copy(); 
-        this.vel = this.startingVel.copy(); 
+        let newStartingVel = this.canvas.createVector(theInitVelx, theInitVely)
+        this.vel = newStartingVel.copy(); 
 
         this.omega = this.canvas.createVector(0, 0, omegaValue)
 
@@ -109,8 +108,25 @@ class Spheroid
         let scaleCf = 30;
         let scaleV = 1.5;
 
-        // if (this.corForce.mag() > 0) this.canvas.image(fCorImg,fCorFinalPosition.x, fCorFinalPosition.y, 2000/scaleCor, 1320/scaleCor)
-        // if (this.centForce.mag() > 0) this.canvas.image(fCfImg,fCentFinalPosition.x, fCentFinalPosition.y, 1656/scaleCf, 1464/scaleCf)
-        // if (this.vel.mag() > 0) this.canvas.image(vImg,velFinalPosition.x, velFinalPosition.y, 46/scaleV, 61/scaleV)
+        if (this.corForce.mag() > 0) this.canvas.image(fCorImg,fCorFinalPosition.x, fCorFinalPosition.y, 2000/scaleCor, 1320/scaleCor)
+        if (this.centForce.mag() > 0) this.canvas.image(fCfImg,fCentFinalPosition.x, fCentFinalPosition.y, 1656/scaleCf, 1464/scaleCf)
+        if (this.vel.mag() > 0) this.canvas.image(vImg,velFinalPosition.x, velFinalPosition.y, 46/scaleV, 61/scaleV)
+    }
+
+    displayTrails()
+    {
+        this.previousPositions.forEach( position => {
+            this.canvas.push()
+                
+                // this.canvas.rotate(rectangles[0].angle)
+                this.canvas.translate(position.x, position.y)
+                this.canvas.fill(this.fill);
+                this.canvas.stroke(this.stroke);
+        
+                let size = spheroidSize / 10; 
+                this.canvas.ellipse(0, 0, size, size);
+
+            this.canvas.pop()
+        })
     }
 }

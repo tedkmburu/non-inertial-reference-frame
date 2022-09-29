@@ -52,12 +52,45 @@ const leftCanvasObject = canvas => {
         canvas.textAlign(canvas.CENTER)
         canvas.fill(0)
         canvas.text("Room Frame", canvas.width / 2, innerHeight - 30)
+
+        if(!playState)
+        {
+            let mousePosition = canvas.createVector(canvas.mouseX, canvas.mouseY)
+            let angle = p5.Vector.sub(mousePosition, spheroids[1].pos).heading()
+            createArrow(spheroids[1].pos, mousePosition, angle, "red", 1, canvas)
+        }
     }
   
     canvas.windowResized = function() // inbuilt p5 function. runs everytime the window is resized
     {
         canvas.resizeCanvas(innerWidth / 2, innerHeight); // resizes the canvas to fit the new window size
         canvas.setup()
+    }
+
+    canvas.mouseClicked = function() {
+        if (!playState)
+        {
+            let mousePosition = canvas.createVector(canvas.mouseX, canvas.mouseY)
+            let direction = p5.Vector.sub(mousePosition, spheroids[1].pos)
+
+            theInitVelx = direction.x / 50;
+            theInitVely = direction.y / 50;
+
+            spheroids.forEach(spheroid => {
+                spheroid.reset()
+            })
+        
+            rectangles.forEach(rectangle => {
+                rectangle.reset()
+            })
+
+            
+            if (mousePosition.x < (innerWidth / 2) - 50)
+            {
+                playState = true;
+            }
+            
+        }
     }
 
     // canvas.mouseDragged = function() { mouseDraggedLeft(canvas); }

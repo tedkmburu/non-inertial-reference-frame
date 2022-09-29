@@ -15,17 +15,27 @@ class Rectangle
 
         this.previousPositions = []
 
-
         this.frame = props.frame; 
     }
 
     move()
     {
-        this.omega += this.angularAcceleration;
-        this.angle += this.omega;
+        if(playForward)
+        {
+            this.omega += this.angularAcceleration;
+            this.angle += this.omega;
 
-        this.vel.add(this.acc);
-        this.pos.add(this.vel);
+            this.vel.add(this.acc);
+            this.pos.add(this.vel);
+        }
+        else
+        {
+            this.omega -= this.angularAcceleration;
+            this.angle -= this.omega;
+            
+            this.vel.sub(this.acc);
+            this.pos.sub(this.vel);
+        }
     }
 
     display()
@@ -48,7 +58,7 @@ class Rectangle
         
             this.canvas.fill(0);
             this.previousPositions.forEach(position => {
-                this.canvas.ellipse(position.x, position.y, 10, 10);
+                this.canvas.ellipse(position.x, position.y, 5, 5);
             });
         this.canvas.pop();
 
@@ -57,7 +67,7 @@ class Rectangle
 
     reset()
     {
-        this.previousPositions = [this.pos];
+        this.previousPositions = [];
         this.angle = 0;
     }
 }
