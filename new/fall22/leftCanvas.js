@@ -73,8 +73,8 @@ const leftCanvasObject = canvas => {
             let mousePosition = canvas.createVector(canvas.mouseX, canvas.mouseY)
             let direction = p5.Vector.sub(mousePosition, spheroids[1].pos)
 
-            theInitVelx = direction.x / 50;
-            theInitVely = direction.y / 50;
+            theInitVelx = direction.x / 100;
+            theInitVely = direction.y / 100;
 
             spheroids.forEach(spheroid => {
                 spheroid.reset()

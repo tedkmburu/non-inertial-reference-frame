@@ -1,4 +1,4 @@
-const theFrameRate = 30; 
+const theFrameRate = 60; 
 
 let playState = true;
 let playForward = true;
@@ -11,8 +11,8 @@ let spheroids = []
 
 let omegaValue = 0.005;
 
-let theInitVelx = 1;
-let theInitVely = 2;
+let theInitVelx = 0.5;
+let theInitVely = 1;
 
 new p5(leftCanvasObject); // creates the left instance of p5
 new p5(rightCanvasObject); // creates the right instance of p5
@@ -78,3 +78,4 @@ function resetAll()
         rectangle.reset()
     })
 }
+

@@ -31,11 +31,11 @@ div.controls
 {
     background-color: white;
     z-index: 1000;
-    width: 100px;
+    width: 80px;
     height: 90%;
     position: fixed;
     top: 5%;
-    left: 45%;
+    left: 47.5%;
     border-radius: 50px;
     border: 3px solid black;
 }

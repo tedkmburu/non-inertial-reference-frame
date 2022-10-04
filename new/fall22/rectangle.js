@@ -36,6 +36,9 @@ class Rectangle
             this.vel.sub(this.acc);
             this.pos.sub(this.vel);
         }
+
+        // the room spins in the wrong direction in the table frame
+        // save screenshots of different parameters and see the results side by side 
     }
 
     display()
