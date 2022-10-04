@@ -29,7 +29,6 @@ class Spheroid
 
     move()
     {
-        
         let netAcc = this.canvas.createVector(0,0)
 
         // calculate the Coriolis and centrifugal forces for a particle
@@ -98,18 +97,24 @@ class Spheroid
     {
         let fCorFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.corForce, 5000));
         let fCentFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.centForce, 5000));
-        let velFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.vel, 50));
+        let velFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.vel, 100));
         
-        createArrow(this.pos, fCorFinalPosition, this.corForce.heading(), "blue", 1, this.canvas);
-        createArrow(this.pos, fCentFinalPosition, this.centForce.heading(), "green", 1, this.canvas);
-        createArrow(this.pos, velFinalPosition, this.vel.heading(), "red", 1, this.canvas);
+        
 
         let scaleCor = 30;
         let scaleCf = 30;
         let scaleV = 1.5;
 
-        if (this.corForce.mag() > 0) this.canvas.image(fCorImg,fCorFinalPosition.x, fCorFinalPosition.y, 2000/scaleCor, 1320/scaleCor)
-        if (this.centForce.mag() > 0) this.canvas.image(fCfImg,fCentFinalPosition.x, fCentFinalPosition.y, 1656/scaleCf, 1464/scaleCf)
+        if (this.frame == "table")
+        {
+            createArrow(this.pos, fCorFinalPosition, this.corForce.heading(), "blue", 1, this.canvas);
+            createArrow(this.pos, fCentFinalPosition, this.centForce.heading(), "green", 1, this.canvas);
+            if (this.corForce.mag() > 0) this.canvas.image(fCorImg,fCorFinalPosition.x, fCorFinalPosition.y, 2000/scaleCor, 1320/scaleCor)
+            if (this.centForce.mag() > 0) this.canvas.image(fCfImg,fCentFinalPosition.x, fCentFinalPosition.y, 1656/scaleCf, 1464/scaleCf)
+        }
+        
+
+        createArrow(this.pos, velFinalPosition, this.vel.heading(), "red", 1, this.canvas);
         if (this.vel.mag() > 0) this.canvas.image(vImg,velFinalPosition.x, velFinalPosition.y, 46/scaleV, 61/scaleV)
     }
 
