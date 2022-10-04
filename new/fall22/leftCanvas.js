@@ -53,7 +53,7 @@ const leftCanvasObject = canvas => {
         canvas.fill(0)
         canvas.text("Room Frame", canvas.width / 2, innerHeight - 30)
 
-        if(!playState)
+        if(!playState && reseting)
         {
             let mousePosition = canvas.createVector(canvas.mouseX, canvas.mouseY)
             let angle = p5.Vector.sub(mousePosition, spheroids[1].pos).heading()
@@ -68,7 +68,7 @@ const leftCanvasObject = canvas => {
     }
 
     canvas.mouseClicked = function() {
-        if (!playState)
+        if (!playState &&  reseting)
         {
             let mousePosition = canvas.createVector(canvas.mouseX, canvas.mouseY)
             let direction = p5.Vector.sub(mousePosition, spheroids[1].pos)
@@ -84,12 +84,12 @@ const leftCanvasObject = canvas => {
                 rectangle.reset()
             })
 
-            
             if (mousePosition.x < (innerWidth / 2) - 50)
             {
                 playState = true;
+                reseting = false;
             }
-            
+
         }
     }
 

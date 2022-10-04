@@ -2,6 +2,7 @@ const theFrameRate = 30;
 
 let playState = true;
 let playForward = true;
+let reseting = false;
 
 let spheroidSize = 25;
 let tableSize = innerWidth / 3;
@@ -39,7 +40,10 @@ function createArrow(start, end, angle, color, scale, canvas)
 
 function toggleRewind()
 {
+    console.log("toggle rewind");
     playForward = !playForward;
+    reseting = false;
+    playState = true; 
 
     if (playForward) 
     {
@@ -53,6 +57,7 @@ function toggleRewind()
 
 function togglePlay()
 {
+    console.log("toggle play");
     playState = !playState;
 
     if (playState) 
@@ -67,9 +72,11 @@ function togglePlay()
 
 function resetAll()
 {
+    console.log("reset");
+    reseting = true;
     playState = false; 
     playForward = true;
-    
+
     spheroids.forEach(spheroid => {
         spheroid.reset()
     })

@@ -19,7 +19,7 @@ const rightCanvasObject = canvas => {
         rectangles[1] = new Rectangle({
             size: canvas.createVector(tableSize, tableSize), 
             pos: canvas.createVector((innerWidth) / 4, innerHeight / 2), 
-            omega: 0.0,
+            omega: 0,
             frame: "table",
             canvas: rightCanvas});
 
@@ -42,7 +42,7 @@ const rightCanvasObject = canvas => {
             let smallerSide = (innerHeight > innerWidth) ?  innerWidth: innerHeight;
             
             canvas.translate(smallerSide / 4, smallerSide / 2)
-            canvas.rotate(rectangles[0].angle)
+            canvas.rotate(-rectangles[0].angle)
             canvas.image(leftGrid,-smallerSide, -smallerSide, smallerSide * 2, smallerSide * 2)
         canvas.pop();
 
