@@ -16,6 +16,7 @@ class Rectangle
         this.previousPositions = []
 
         this.frame = props.frame; 
+        this.tempPosition = []
     }
 
     move()
@@ -54,6 +55,19 @@ class Rectangle
             this.canvas.rect(0, 0, tableSize, tableSize);
         this.canvas.pop();
 
+        this.displayTrials()
+
+        this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize, spheroidSize);
+    }
+
+    reset()
+    {
+        this.previousPositions = [];
+        this.angle = 0;
+    }
+
+    displayTrials()
+    {
         this.canvas.push();
             this.canvas.translate(this.pos);
             this.canvas.rotate(this.angle);
@@ -64,13 +78,5 @@ class Rectangle
                 this.canvas.ellipse(position.x, position.y, 5, 5);
             });
         this.canvas.pop();
-
-        this.canvas.ellipse(this.pos.x, this.pos.y, spheroidSize, spheroidSize);
-    }
-
-    reset()
-    {
-        this.previousPositions = [];
-        this.angle = 0;
     }
 }

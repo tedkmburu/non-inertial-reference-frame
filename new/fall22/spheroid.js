@@ -24,43 +24,103 @@ class Spheroid
         this.stroke = props.stroke || "black";
         this.fill = props.fill || "white";
 
-        this.frame = props.frame; 
+        this.frame = props.frame;
+        this.rectangle = props.rectangle; 
     }
 
     move()
     {
-        let netAcc = this.canvas.createVector(0,0)
-
-        // calculate the Coriolis and centrifugal forces for a particle
-        this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
-        let rho = p5.Vector.sub(this.pos, rectangles[0].pos);
-        this.centForce = p5.Vector.mult(rho, p5.Vector.dot(this.omega, this.omega) * this.mass);
-
-        // combine the Coriolis and centrifugal forces and divide by mass to get net force
-        this.acc = p5.Vector.add(this.corForce, this.centForce).div(this.mass);
-
-        netAcc.add(this.acc)
-
-        // this will add points to the trail of the red ball
-        if (this.canvas.frameCount % 15 == 0) 
+        if(this.frame == "room")
         {
-            let newPosition = this.pos.copy()
-            this.previousPositions.push(newPosition.copy())
-            let rectPosition = newPosition.copy().sub(rectangles[0].pos.copy()).rotate(-rectangles[0].angle)
-            rectangles[0].previousPositions.push(rectPosition)
-        }
+            let netAcc = this.canvas.createVector(0,0)
 
-        // eulers method with vectors
-
-        if(playForward)
-        {
-            this.vel.add(netAcc.div(100));
-            this.pos.add(this.vel);
+            // calculate the Coriolis and centrifugal forces for a particle
+            this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
+            let rho = p5.Vector.sub(this.pos, rectangles[0].pos);
+            this.centForce = p5.Vector.mult(rho, p5.Vector.dot(this.omega, this.omega) * this.mass);
+    
+            // combine the Coriolis and centrifugal forces and divide by mass to get net force
+            this.acc = p5.Vector.add(this.corForce, this.centForce).div(this.mass);
+            // this.acc.mult(100);
+    
+            netAcc.add(this.acc)
+    
+            // this will add points to the trail of the red ball
+            if (this.canvas.frameCount % 15 == 0) 
+            {
+                let newPosition = this.pos.copy()
+                this.previousPositions.push(newPosition.copy())
+                let rectPosition = newPosition.copy().sub(rectangles[0].pos.copy()).rotate(-rectangles[0].angle)
+                this.rectangle.previousPositions.push(rectPosition)
+            }
+    
+            // eulers method with vectors
+    
+            if(playForward)
+            {
+                this.vel.add(netAcc.div(100));
+                this.pos.add(this.vel);
+    
+                // if (this.frame == "table")
+                // {
+                //     this.pos.rotate(-rectangles[0].angle)
+                // }
+            }
+            else
+            {
+                this.vel.sub(netAcc.div(100));
+                this.pos.sub(this.vel);
+            }
         }
         else
         {
-            this.vel.sub(netAcc.div(100));
-            this.pos.sub(this.vel);
+            let netAcc = this.canvas.createVector(0,0)
+
+            // calculate the Coriolis and centrifugal forces for a particle
+            this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
+            let rho = p5.Vector.sub(this.pos, rectangles[0].pos);
+            this.centForce = p5.Vector.mult(rho, p5.Vector.dot(this.omega, this.omega) * this.mass);
+    
+            // combine the Coriolis and centrifugal forces and divide by mass to get net force
+            this.acc = p5.Vector.add(this.corForce, this.centForce).div(this.mass);
+            // this.acc.mult(100);
+    
+            netAcc.add(this.acc)
+    
+            // this will add points to the trail of the red ball
+            if (this.canvas.frameCount % 15 == 0) 
+            {
+                let newPosition = this.pos.copy()
+                // this.previousPositions.push(newPosition.copy())
+                // let rectPosition = newPosition.copy().sub(rectangles[0].pos.copy()).rotate(-rectangles[0].angle)
+                let rectPosition = newPosition.copy().sub(rectangles[0].pos.copy()).rotate(-rectangles[0].angle)
+                this.rectangle.previousPositions.push(rectPosition)
+            }
+
+            let newPosition = this.pos.copy()
+                // this.previousPositions.push(newPosition.copy())
+                // let rectPosition = newPosition.copy().sub(rectangles[0].pos.copy()).rotate(-rectangles[0].angle)
+            let rectPosition = newPosition.copy().sub(rectangles[0].pos.copy()).rotate(-rectangles[0].angle)
+            this.rectangle.tempPosition.push(rectPosition)
+
+
+            // eulers method with vectors
+    
+            if(playForward)
+            {
+                this.vel.add(netAcc.div(100));
+                this.pos.add(this.vel);
+    
+                // if (this.frame == "table")
+                // {
+                //     this.pos.rotate(-rectangles[0].angle)
+                // }
+            }
+            else
+            {
+                this.vel.sub(netAcc.div(100));
+                this.pos.sub(this.vel);
+            }
         }
         
     }
@@ -79,6 +139,7 @@ class Spheroid
         this.displayTrails()
 
         this.canvas.pop()
+        
     }
 
     reset()
@@ -98,8 +159,6 @@ class Spheroid
         let fCorFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.corForce, 5000));
         let fCentFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.centForce, 5000));
         let velFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.vel, 100));
-        
-        
 
         let scaleCor = 30;
         let scaleCf = 30;

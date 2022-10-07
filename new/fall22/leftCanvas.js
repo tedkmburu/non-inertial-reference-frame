@@ -23,7 +23,9 @@ const leftCanvasObject = canvas => {
             vel: canvas.createVector(theInitVelx, theInitVely),  
             fill: "red",
             frame: "room",
-            canvas: leftCanvas});
+            canvas: leftCanvas,
+            rectangle: rectangles[0]
+        });
     }
   
     canvas.draw = function() // this function runs every frame. Everything on the left canvas starts here.

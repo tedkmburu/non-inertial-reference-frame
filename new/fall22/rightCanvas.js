@@ -6,6 +6,7 @@ const rightCanvasObject = canvas => {
         fCfImg = canvas.loadImage('images/ref (2).png'); 
         vImg = canvas.loadImage('images/v.png'); 
     }
+    
     canvas.setup = function()  // This function only runs once when the page first loads. 
     {
         let cnv = canvas.createCanvas(innerWidth / 2, innerHeight); // creates the <canvas> that everything runs on.
@@ -26,10 +27,11 @@ const rightCanvasObject = canvas => {
         spheroids[1] = new Spheroid({
             pos: canvas.createVector((innerWidth) / 4, (innerHeight / 4) - 50), 
             vel: canvas.createVector(theInitVelx, theInitVely), 
-            // omega: canvas.createVector(0, 0, omegaValue), 
             fill: "red",
             frame: "table",
-            canvas: rightCanvas});
+            canvas: rightCanvas,
+            rectangle: rectangles[1]
+        });
 
         spheroids[1].reset()
     }

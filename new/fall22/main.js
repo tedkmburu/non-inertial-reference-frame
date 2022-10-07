@@ -11,6 +11,7 @@ let rectangles = []
 let spheroids = []
 
 let omegaValue = 0.005;
+let mass = 1;
 
 let theInitVelx = 0.5;
 let theInitVely = 1;
@@ -86,3 +87,17 @@ function resetAll()
     })
 }
 
+function changeOmega()
+{
+    // console.log("adsf");
+    omegaValue = parseFloat(document.getElementById("omega").value);
+    console.log(omegaValue);
+    rectangles[0].omega = omegaValue;
+}
+
+function changeMass()
+{
+    mass = parseFloat(document.getElementById("mass").value);
+    spheroids[0].mass = mass;
+    spheroids[1].mass = mass;
+}
