@@ -5,8 +5,9 @@ const rightCanvasObject = canvas => {
         fCorImg = canvas.loadImage('images/ref (1).png'); 
         fCfImg = canvas.loadImage('images/ref (2).png'); 
         vImg = canvas.loadImage('images/v.png'); 
+        equation = canvas.loadImage('images/equation.png'); 
     }
-    
+
     canvas.setup = function()  // This function only runs once when the page first loads. 
     {
         let cnv = canvas.createCanvas(innerWidth / 2, innerHeight); // creates the <canvas> that everything runs on.
@@ -68,6 +69,8 @@ const rightCanvasObject = canvas => {
         canvas.noStroke()
         canvas.textAlign(canvas.CENTER)
         canvas.text("Table Frame", canvas.width / 2, innerHeight - 30)
+
+        canvas.image(equation, 0, 0, 400, 80)
     }
   
     canvas.windowResized = function() // inbuilt p5 function. runs everytime the window is resized

@@ -16,6 +16,8 @@ let mass = 1;
 let theInitVelx = 0.5;
 let theInitVely = 1;
 
+let rightGrid, fCorImg, fCfImg, vImg, equation
+
 new p5(leftCanvasObject); // creates the left instance of p5
 new p5(rightCanvasObject); // creates the right instance of p5
 
