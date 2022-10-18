@@ -1,11 +1,18 @@
 const theFrameRate = 60; 
 
+let landscape;
+let canvasHeight, canvasWidth;
+let canvasPosX, canvasPosY, spheroidPosX, spheroidPosY;
+let tableSize;
+let roomCnv, tableCnv; 
+let controlMenu; 
+
 let playState = true;
 let playForward = true;
 let reseting = false;
+let showHelp = false;
 
 let spheroidSize = 25;
-let tableSize = innerWidth / 3;
 
 let rectangles = []
 let spheroids = []
@@ -16,11 +23,10 @@ let mass = 1;
 let theInitVelx = 0.5;
 let theInitVely = 1;
 
-let rightGrid, fCorImg, fCfImg, vImg, equation
+let rightGrid, fCorImg, fCfImg, vImg, equation;
 
 new p5(leftCanvasObject); // creates the left instance of p5
 new p5(rightCanvasObject); // creates the right instance of p5
-
 
 function createArrow(start, end, angle, color, scale, canvas)
 {
@@ -93,8 +99,12 @@ function changeOmega()
 {
     // console.log("adsf");
     omegaValue = parseFloat(document.getElementById("omega").value);
-    console.log(omegaValue);
+    // console.log(omegaValue);
     rectangles[0].omega = omegaValue;
+    rectangles[1].omega = 0;
+
+    spheroids[1].omega = new p5.Vector(0, 0, omegaValue);
+    spheroids[0].omega = new p5.Vector(0, 0, 0);
 }
 
 function changeMass()
@@ -102,4 +112,20 @@ function changeMass()
     mass = parseFloat(document.getElementById("mass").value);
     spheroids[0].mass = mass;
     spheroids[1].mass = mass;
+}
+
+function toggleHelp()
+{
+    togglePlay()
+    showHelp = !showHelp;
+
+    let helpContainer = document.getElementById("helpContainer");
+    if (showHelp) 
+    {
+        helpContainer.style.display = 'block';
+    }
+    else
+    {
+        helpContainer.style.display = 'none';
+    }
 }

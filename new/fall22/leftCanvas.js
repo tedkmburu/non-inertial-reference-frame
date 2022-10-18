@@ -1,10 +1,50 @@
 const leftCanvasObject = canvas => {
-    canvas.preload = function() { leftGrid = canvas.loadImage('images/grid2.png'); }
-    canvas.setup = function()  // This function only runs once when the page first loads. 
+    canvas.preload = function() 
     {
-        let cnv = canvas.createCanvas(innerWidth / 2, innerHeight);
-        cnv.addClass('left');
+        leftGrid = canvas.loadImage('images/grid2.png'); 
+        if (innerWidth > innerHeight) 
+        {
+            landscape = true;
+            canvasHeight = innerHeight;
+            canvasWidth = innerWidth / 2;
+            canvasPosX = innerWidth / 4
+            canvasPosY = innerHeight / 2
+            spheroidPosX = innerWidth / 4
+            spheroidPosY = (innerHeight / 4) - 50
+            tableSize = innerWidth / 3;
+        }
+        else
+        {
+            landscape = false;
+            canvasHeight = innerHeight / 2;
+            canvasWidth = innerWidth;
+            canvasPosX = innerWidth / 2
+            canvasPosY = innerHeight / 4
+            spheroidPosX = innerWidth / 2
+            spheroidPosY = (innerHeight / 8) - 50
+            tableSize = innerHeight / 3;
+        }
+    }
+    canvas.setup = function()  // This function only runs once when the page first loads. 
+    {        
+        roomCnv = canvas.createCanvas(canvasWidth, canvasHeight);
         leftCanvas = canvas;
+        controlMenu = canvas.select('#controls')
+
+
+        if (landscape) 
+        {
+            roomCnv.addClass('left');
+            controlMenu.class("landscapeMenu")
+        }
+        else
+        {
+            roomCnv.addClass('top');
+            controlMenu.class("portraitMenu")
+        }
+
+        console.log(controlMenu.class());
+        
 
         canvas.angleMode(canvas.RADIANS);
         canvas.rectMode(canvas.CENTER);
@@ -12,20 +52,24 @@ const leftCanvasObject = canvas => {
 
         rectangles[0] = new Rectangle({
             size: canvas.createVector(tableSize, tableSize), 
-            pos: canvas.createVector((innerWidth) / 4, innerHeight / 2), 
+            pos: canvas.createVector(canvasPosX, canvasPosY), 
             frame: "room",
             omega: omegaValue,
             canvas: leftCanvas
         });
 
         spheroids[0] = new Spheroid({
-            pos: canvas.createVector((innerWidth) / 4, (innerHeight / 4) - 50), 
+            pos: canvas.createVector(spheroidPosX, spheroidPosY), 
             vel: canvas.createVector(theInitVelx, theInitVely),  
             fill: "red",
             frame: "room",
+            mass: parseFloat(document.getElementById("mass").value),
+            omega: canvas.createVector(0, 0, 0),
             canvas: leftCanvas,
             rectangle: rectangles[0]
         });
+
+        
     }
   
     canvas.draw = function() // this function runs every frame. Everything on the left canvas starts here.
@@ -53,7 +97,7 @@ const leftCanvasObject = canvas => {
         canvas.noStroke()
         canvas.textAlign(canvas.CENTER)
         canvas.fill(0)
-        canvas.text("Room Frame", canvas.width / 2, innerHeight - 30)
+        canvas.text("Room Frame", canvasWidth / 2, canvasHeight - 30)
 
         if(!playState && reseting)
         {
@@ -65,12 +109,50 @@ const leftCanvasObject = canvas => {
   
     canvas.windowResized = function() // inbuilt p5 function. runs everytime the window is resized
     {
-        canvas.resizeCanvas(innerWidth / 2, innerHeight); // resizes the canvas to fit the new window size
+        if (innerWidth > innerHeight) 
+        {
+            landscape = true;
+            canvasHeight = innerHeight;
+            canvasWidth = innerWidth / 2;
+            canvasPosX = innerWidth / 4
+            canvasPosY = innerHeight / 2
+            spheroidPosX = innerWidth / 4
+            spheroidPosY = (innerHeight / 4) - 50
+            tableSize = innerWidth / 3;
+        }
+        else
+        {
+            landscape = false;
+            canvasHeight = innerHeight / 2;
+            canvasWidth = innerWidth;
+            canvasPosX = innerWidth / 2
+            canvasPosY = innerHeight / 4
+            spheroidPosX = innerWidth / 2
+            spheroidPosY = (innerHeight / 8) - 50
+            tableSize = innerHeight / 3;
+        }
+
+        if (landscape) 
+        {
+            roomCnv.removeClass('left');
+            roomCnv.removeClass('top');
+            roomCnv.addClass('left');
+        }
+        else
+        {
+            roomCnv.removeClass('left');
+            roomCnv.removeClass('top');
+            roomCnv.addClass('top');
+        }
+
+        console.log(canvasHeight);
+
+        canvas.resizeCanvas(canvasHeight, canvasHeight); // resizes the canvas to fit the new window size
         canvas.setup()
     }
 
     canvas.mouseClicked = function() {
-        if (!playState &&  reseting)
+        if (!playState && reseting)
         {
             let mousePosition = canvas.createVector(canvas.mouseX, canvas.mouseY)
             let direction = p5.Vector.sub(mousePosition, spheroids[1].pos)
@@ -86,12 +168,18 @@ const leftCanvasObject = canvas => {
                 rectangle.reset()
             })
 
-            if (mousePosition.x < (innerWidth / 2) - 50)
+            if (mousePosition.x < (innerWidth / 2) - 50 && landscape)
             {
                 playState = true;
                 reseting = false;
             }
 
+            if (mousePosition.y < (innerHeight / 2) - 50 && !landscape)
+            {
+                playState = true;
+                reseting = false;
+            }
+            
         }
     }
 

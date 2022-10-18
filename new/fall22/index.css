@@ -12,6 +12,22 @@ canvas.right
     right: 0;
     width: 50%;
 }
+canvas.top
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+}
+canvas.bottom
+{
+    position: fixed;
+    top: 50%;
+    right: 0;
+    width: 100%;
+    height: 50%;
+}
 
 body, html
 {
@@ -29,7 +45,28 @@ body, html
   -ms-user-select: none;
 }
 
-div.controls
+div.helpContainer
+{
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: relative;
+    background-color: rgba(0,0,0,0.75);
+    z-index: 9999;
+    display: none;
+}
+div.help
+{
+    background-color: white;
+    position: relative;
+    top: 10%;
+    left: 10%;
+    width: 70%;
+    padding: 5%;
+}
+
+div.landscapeMenu
 {
     background-color: white;
     z-index: 1000;
@@ -45,12 +82,94 @@ div.controls
     border: 3px solid black;
 }
 
-div.controls ul
+div.landscapeMenu ul
 {
     width: 100%;
     height: 100%;
     padding: 0;
     margin: 0;
+    margin-top: 15px;
+}
+
+div.landscapeMenu ul li
+{
+    list-style: none;
+    /* margin: 0; */
+    margin-bottom: 10%;
+    margin-top: 5%;
+    padding: 0;
+    width: 100%;
+    float: left;
+}
+
+div.portraitMenu
+{
+    background-color: white;
+    z-index: 1000;
+    width: 90%;
+    height: 80px;
+    position: fixed;
+    top: 47%;
+    left: 10%;
+    transform: translateX(-45px);
+    padding: 0;
+    margin: 0;
+    border-radius: 50px;
+    border: 3px solid black;
+}
+
+div.portraitMenu ul
+{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+div.portraitMenu ul li
+{
+    list-style: none;
+    margin: 0;
+    margin-top: 15px;
+    padding: 0;
+    width: 12%;
+    float: left;
+}
+
+div.landscapeMenu li.range
+{
+    height: 100px;
+    margin-left: 10px;
+}
+
+img.controls
+{
+    width: 50px;
+    height: 50px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img.controlsTitle
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.landscapeMenu input.range
+{
+    rotate: 90deg;
+    transform: translate(50px, 50px);
+    margin-left: 49%;
+}
+
+div.portraitMenu input.range
+{
+    /* rotate: 90deg; */
+    transform: translate(0px, 15px);
+    /* margin-left: 49%; */
 }
 
 .slidecontainer {
@@ -86,46 +205,6 @@ div.controls ul
     background: #04AA6D;
     cursor: pointer;
   }
-
-div.controls ul li
-{
-    list-style: none;
-    /* margin: 0; */
-    margin-bottom: 10%;
-    margin-top: 5%;
-    padding: 0;
-    width: 100%;
-    float: left;
-}
-
-li.range
-{
-    height: 100px;
-    margin-left: 10px;
-}
-
-img.controls
-{
-    width: 50px;
-    height: 50px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-img.controlsTitle
-{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-input.range
-{
-    rotate: 90deg;
-    transform: translate(50px, 50px);
-    margin-left: 49%;
-}
 /* 
 canvas
 {

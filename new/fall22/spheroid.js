@@ -30,7 +30,7 @@ class Spheroid
 
     move()
     {
-        let netAcc = this.canvas.createVector(0,0)
+        this.acc = this.canvas.createVector(0,0)
 
         // calculate the Coriolis and centrifugal forces for a particle
         this.corForce = p5.Vector.mult(p5.Vector.cross(this.vel, this.omega), (-2 * this.mass));
@@ -38,10 +38,7 @@ class Spheroid
         this.centForce = p5.Vector.mult(rho, p5.Vector.dot(this.omega, this.omega) * this.mass);
 
         // combine the Coriolis and centrifugal forces and divide by mass to get net force
-        this.acc = p5.Vector.add(this.corForce, this.centForce).div(this.mass);
-        // this.acc.mult(100);
-
-        netAcc.add(this.acc)
+        this.acc.add(p5.Vector.add(this.corForce, this.centForce).div(this.mass));
 
         // this will add points to the trail of the red ball
         if (this.canvas.frameCount % 15 == 0) 
@@ -53,17 +50,16 @@ class Spheroid
         }
 
         // eulers method with vectors
-        if(playForward)
+        if (playForward)
         {
-            this.vel.add(netAcc);
+            this.vel.add(this.acc);
             this.pos.add(this.vel);
         }
         else
         {
-            this.vel.sub(netAcc);
+            this.vel.sub(this.acc);
             this.pos.sub(this.vel);
         }
-
     }
 
     display()
@@ -80,7 +76,6 @@ class Spheroid
         this.displayTrails()
 
         this.canvas.pop()
-        
     }
 
     reset()
@@ -92,7 +87,7 @@ class Spheroid
 
         // if (this.frame == "room") 
         // { 
-            this.omega = this.canvas.createVector(0, 0, omegaValue)
+            // this.omega = this.canvas.createVector(0, 0, omegaValue)
         // }
 
         this.previousPositions = [this.pos]
@@ -102,7 +97,7 @@ class Spheroid
     {
         let fCorFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.corForce, 5000));
         let fCentFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.centForce, 5000));
-        let velFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.vel, 100));
+        let velFinalPosition = p5.Vector.add(this.pos, p5.Vector.mult(this.vel, 70));
 
         let scaleCor = 30;
         let scaleCf = 30;

@@ -10,8 +10,15 @@ const rightCanvasObject = canvas => {
 
     canvas.setup = function()  // This function only runs once when the page first loads. 
     {
-        let cnv = canvas.createCanvas(innerWidth / 2, innerHeight); // creates the <canvas> that everything runs on.
-        cnv.addClass('right');
+        tableCnv = canvas.createCanvas(canvasWidth, canvasHeight); // creates the <canvas> that everything runs on.
+        if (landscape) 
+        {
+            tableCnv.addClass('right');
+        }
+        else
+        {
+            tableCnv.addClass('bottom');
+        }
         rightCanvas = canvas;
 
         canvas.angleMode(canvas.RADIANS);
@@ -20,16 +27,18 @@ const rightCanvasObject = canvas => {
 
         rectangles[1] = new Rectangle({
             size: canvas.createVector(tableSize, tableSize), 
-            pos: canvas.createVector((innerWidth) / 4, innerHeight / 2), 
+            pos: canvas.createVector(canvasPosX, canvasPosY), 
             omega: 0,
             frame: "table",
             canvas: rightCanvas});
 
         spheroids[1] = new Spheroid({
-            pos: canvas.createVector((innerWidth) / 4, (innerHeight / 4) - 50), 
+            pos: canvas.createVector(spheroidPosX, spheroidPosY), 
             vel: canvas.createVector(theInitVelx, theInitVely), 
             fill: "red",
             frame: "table",
+            mass: parseFloat(document.getElementById("mass").value),
+            omega: canvas.createVector(0, 0, omegaValue),
             canvas: rightCanvas,
             rectangle: rectangles[1]
         });
@@ -68,14 +77,27 @@ const rightCanvasObject = canvas => {
         canvas.fill("black");
         canvas.noStroke()
         canvas.textAlign(canvas.CENTER)
-        canvas.text("Table Frame", canvas.width / 2, innerHeight - 30)
+        canvas.text("Table Frame", canvasWidth / 2, canvasHeight - 30)
 
         canvas.image(equation, 0, 0, 400, 80)
     }
   
     canvas.windowResized = function() // inbuilt p5 function. runs everytime the window is resized
     {
-        canvas.resizeCanvas(innerWidth / 2, innerHeight); // resizes the canvas to fit the new window size
+        if (landscape) 
+        {
+            tableCnv.removeClass('right');
+            tableCnv.removeClass('bottom');
+            tableCnv.addClass('right');
+        }
+        else
+        {
+            tableCnv.removeClass('right');
+            tableCnv.removeClass('bottom');
+            tableCnv.addClass('bottom');
+        }
+
+        canvas.resizeCanvas(canvasHeight, canvasHeight); // resizes the canvas to fit the new window size
         canvas.setup()
     }
 

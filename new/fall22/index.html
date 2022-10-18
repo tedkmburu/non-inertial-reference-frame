@@ -7,7 +7,7 @@
       <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
     </head>
     <body oncontextmenu="return false">
-      <div class="controls">
+      <div class="controls" id="controls">
         <ul>
           <li>
             <img src="images/backward-solid.svg"  id="playForward" onclick="toggleRewind()" class="controls">
@@ -22,7 +22,7 @@
             <img src="images/omega.png" class="controlsTitle">
           </li>
           <li class="range">
-            <input type="range" oninput="changeOmega()" class="slider range" name="omega" id="omega" min="-0.01" max="0.01" step="0.001" value="0.005">
+            <input type="range" oninput="changeOmega()" class="slider range" name="omega" id="omega" min="-0.01" max="0.01" step="0.005" value="0.005">
           </li>
           <li>
             <img src="images/mass.png" class="controlsTitle">
@@ -34,6 +34,17 @@
             <img src="images/circle-info-solid.svg" onclick="toggleHelp()" class="controls">
           </li>
         </ul>
+      </div>
+      <div class="helpContainer" id="helpContainer">
+        <div class="help">
+          <button class="close" onclick="toggleHelp()">x</button>
+          <br>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.
+          <br><br>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.
+          <br><br>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ad itaque ex cumque, reiciendis eos nesciunt quaerat perferendis neque maxime nisi reprehenderit doloremque at consectetur nihil nobis exercitationem, quod voluptatum.
+        </div>
       </div>
     </body>
 
