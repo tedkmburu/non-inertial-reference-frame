@@ -108,7 +108,7 @@ class CannonBall
     displayEnviroment(scale)
     {
         this.canvas.push()
-        this.canvas.image(enviroment, -this.cannonPos.copy().x, -(560) * scale, 7144 * scale, 4782 * scale) 
+        this.canvas.image(enviroment, -this.cannonPos.copy().x, -(1280) * scale, 7144 * scale, 4782 * scale) 
         this.canvas.pop()
     }
 }

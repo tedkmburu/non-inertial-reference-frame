@@ -1,11 +1,11 @@
 const rightCanvasObject = canvas => {
     canvas.preload = function() 
     { 
-        rightGrid = canvas.loadImage('images/grid2.png'); 
-        fCorImg = canvas.loadImage('images/ref (1).png'); 
-        fCfImg = canvas.loadImage('images/ref (2).png'); 
-        vImg = canvas.loadImage('images/v.png'); 
-        equation = canvas.loadImage('images/equation.png'); 
+        
+        // fCorImg = canvas.loadImage('images/ref (1).png'); 
+        // fCfImg = canvas.loadImage('images/ref (2).png'); 
+        // vImg = canvas.loadImage('images/v.png'); 
+        // equation = canvas.loadImage('images/equation.png'); 
     }
 
     canvas.setup = function()  // This function only runs once when the page first loads. 
@@ -26,10 +26,10 @@ const rightCanvasObject = canvas => {
         canvas.ellipseMode(canvas.CENTER);
 
 
-        cannonBalls[1] = new CannonBall({
-            pos: canvas.createVector(canvas.width/2, canvas.height / 2),
-            vel: canvas.createVector(2, -1),
-            frameVel: canvas.createVector(2, 0),
+        trucks[1] = new Truck({
+            pos: canvas.createVector(canvas.width/2, canvas.height / 1.5),
+            vel: canvas.createVector(0, 0),
+            frameVel: canvas.createVector(truckVel, 0),
             canvas: rightCanvas
         })
 
@@ -43,11 +43,11 @@ const rightCanvasObject = canvas => {
 
         if (playState) 
         { 
-            cannonBalls[1].move(); 
+            trucks[1].move(); 
         }
-        cannonBalls[1].display();
+        trucks[1].display();
 
-        if (cannonBalls[1].pos.y > canvas.height / 1.5) 
+        if (trucks[1].pos.y > canvas.height / 1.5) 
         {
             playState = false;
         }
